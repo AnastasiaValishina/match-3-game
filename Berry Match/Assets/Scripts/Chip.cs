@@ -16,17 +16,15 @@ public class Chip : MonoBehaviour
     Vector2 tempPosition;
     public float swipeAngle = 0;
     public float swipeResist = 1f;
-    bool isMatched = false;
+    public bool isMatched = false;
 
     private void Start()
     {
         board = FindObjectOfType<Board>();
-        targetX = (int)transform.position.x;
-        targetY = (int)transform.position.y;
-        row = targetY;
-        column = targetX;
-        previousRow = row;
-        previousColumn = column;
+       // targetX = (int)transform.position.x;
+       // targetY = (int)transform.position.y;
+       // row = targetY;
+       // column = targetX;
     }
 
     private void Update()
@@ -34,8 +32,7 @@ public class Chip : MonoBehaviour
         FindMatches();
         if (isMatched)
         {
-            GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 200f);
-
+            GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 100f);
         }
 
         targetX = column;
@@ -44,7 +41,11 @@ public class Chip : MonoBehaviour
         {
             //Move towards target
             tempPosition = new Vector2(targetX, transform.position.y);
-            transform.position = Vector2.Lerp(transform.position, tempPosition, 0.4f);
+            transform.position = Vector2.Lerp(transform.position, tempPosition, 0.6f);
+            if (board.allChips[column, row] != gameObject)
+            {
+                board.allChips[column, row] = gameObject;
+            }
         }
         else
         {
@@ -57,11 +58,15 @@ public class Chip : MonoBehaviour
         {
             //Move towards target
             tempPosition = new Vector2(transform.position.x, targetY);
-            transform.position = Vector2.Lerp(transform.position, tempPosition, 0.4f);
+            transform.position = Vector2.Lerp(transform.position, tempPosition, 0.6f);
+            if (board.allChips[column, row] != gameObject)
+            {
+                board.allChips[column, row] = gameObject;
+            }
         }
         else
         {
-            //diractly set position
+            //directly set position
             tempPosition = new Vector2(transform.position.x, targetY);
             transform.position = tempPosition;
             board.allChips[column, row] = gameObject;
@@ -79,6 +84,10 @@ public class Chip : MonoBehaviour
                 otherChip.GetComponent<Chip>().column = column;
                 row = previousRow;
                 column = previousColumn;
+            }
+            else
+            {
+                board.DestroyMatches();
             }
             otherChip = null;
         }
@@ -110,6 +119,8 @@ public class Chip : MonoBehaviour
         {
             // right swipe
             otherChip = board.allChips[column + 1, row];
+            previousRow = row;
+            previousColumn = column;
             otherChip.GetComponent<Chip>().column -= 1;
             column += 1;
         }
@@ -117,6 +128,8 @@ public class Chip : MonoBehaviour
         {
             // up swipe
             otherChip = board.allChips[column, row + 1];
+            previousRow = row;
+            previousColumn = column;
             otherChip.GetComponent<Chip>().row -= 1;
             row += 1;
         }
@@ -124,6 +137,8 @@ public class Chip : MonoBehaviour
         {
             // left swipe
             otherChip = board.allChips[column - 1, row];
+            previousRow = row;
+            previousColumn = column;
             otherChip.GetComponent<Chip>().column += 1;
             column -= 1;
         }
@@ -131,6 +146,8 @@ public class Chip : MonoBehaviour
         {
             // down swipe
             otherChip = board.allChips[column, row - 1];
+            previousRow = row;
+            previousColumn = column;
             otherChip.GetComponent<Chip>().row += 1;
             row -= 1;
         }

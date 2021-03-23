@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using UnityEditor;
 using UnityEngine;
 
 public class Board : MonoBehaviour
 {
     public int width = 8;
     public int height = 8;
+    public int offset = 10;
     public GameObject tilePrefab;
     public GameObject[] chips;
     public GameObject[,] allChips;
@@ -26,11 +28,12 @@ public class Board : MonoBehaviour
         {
             for (int j = 0; j < height; j++)
             {
-                Vector2 tempPosition = new Vector2(i, j);
-                GameObject backgroundTile = Instantiate(tilePrefab, tempPosition, Quaternion.identity) as GameObject;
+                Vector2 tilePosition = new Vector2(i, j);
+                GameObject backgroundTile = Instantiate(tilePrefab, tilePosition, Quaternion.identity) as GameObject;
                 backgroundTile.transform.parent = transform;
                 backgroundTile.name = "( " + i + ", " + j + " )";
 
+                Vector2 chipPosition = new Vector2(i, j + offset);
                 int randomChip = Random.Range(0, chips.Length);
                 int maxIterations = 0;
                 while (MatchesAt(i, j, chips[randomChip]) && maxIterations < 100)
@@ -39,7 +42,10 @@ public class Board : MonoBehaviour
                     maxIterations++;
                 }
                 maxIterations = 0;
-                GameObject chip = Instantiate(chips[randomChip], tempPosition, Quaternion.identity);
+                GameObject chip = Instantiate(chips[randomChip], chipPosition, Quaternion.identity);
+                chip.GetComponent<Chip>().row = j;
+                chip.GetComponent<Chip>().column = i;
+
                 chip.transform.parent = transform;
                 chip.name = "( " + i + ", " + j + " )";
                 allChips[i, j] = chip;
@@ -78,5 +84,101 @@ public class Board : MonoBehaviour
             }
         }
         return false;
+    }
+
+    void DestroyMatchesAt(int column, int row)
+    {
+        if (allChips[column, row].GetComponent<Chip>().isMatched)
+        {
+            Destroy(allChips[column, row]);
+            allChips[column, row] = null;
+        } 
+    }
+
+    public void DestroyMatches()
+    {
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                if (allChips[i, j] != null)
+                {
+                    DestroyMatchesAt(i, j);
+                }
+            }
+        }
+        StartCoroutine(DecreaseRow());
+    }
+
+    IEnumerator DecreaseRow()
+    {
+        int nullCount = 0;
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                if (allChips[i, j] == null)
+                {
+                    nullCount++;
+                } 
+                else if (nullCount > 0)
+                {
+                    allChips[i, j].GetComponent<Chip>().row -= nullCount;
+                    allChips[i, j] = null;
+                }
+            }
+            nullCount = 0;
+        }
+        yield return new WaitForSeconds(0.5f);
+        StartCoroutine(FillBoard());
+    }
+
+    void RefillBoard()
+    {
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                if (allChips[i, j] == null)
+                {
+                    Vector2 tempPosition = new Vector2(i, j + offset);
+                    int randomChip = Random.Range(0, chips.Length);
+                    GameObject chip = Instantiate(chips[randomChip], tempPosition, Quaternion.identity);
+                    allChips[i, j] = chip;
+                    chip.GetComponent<Chip>().row = j;
+                    chip.GetComponent<Chip>().column = i;
+                }
+            }
+        }
+    }
+
+    bool MatchesOnBoard()
+    {
+        for(int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                if (allChips[i, j] != null)
+                {
+                    if(allChips[i, j].GetComponent<Chip>().isMatched)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    IEnumerator FillBoard()
+    {
+        RefillBoard();
+        yield return new WaitForSeconds(0.5f);
+
+        while (MatchesOnBoard())
+        {
+            yield return new WaitForSeconds(0.5f);
+            DestroyMatches();
+        }
     }
 }

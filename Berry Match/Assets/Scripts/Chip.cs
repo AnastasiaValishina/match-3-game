@@ -8,12 +8,14 @@ public class Chip : MonoBehaviour
     public int column, row;
     public int previousRow, previousColumn;
     public int targetX, targetY;
+
     Board board;
     GameObject otherChip;
     Vector2 firstTouchPosition;
     Vector2 finalTouchPosition;
     Vector2 tempPosition;
     public float swipeAngle = 0;
+    public float swipeResist = 1f;
     bool isMatched = false;
 
     private void Start()
@@ -94,8 +96,12 @@ public class Chip : MonoBehaviour
 
     private void CalculateAngle()
     {
-        swipeAngle = Mathf.Atan2(finalTouchPosition.y - firstTouchPosition.y, finalTouchPosition.x - firstTouchPosition.x) * 180 / Mathf.PI;
-        MoveChips();
+        if (Mathf.Abs(finalTouchPosition.y - firstTouchPosition.y) > swipeResist || 
+            Mathf.Abs(finalTouchPosition.x - firstTouchPosition.x) > swipeResist)
+        {
+            swipeAngle = Mathf.Atan2(finalTouchPosition.y - firstTouchPosition.y, finalTouchPosition.x - firstTouchPosition.x) * 180 / Mathf.PI;
+            MoveChips();
+        }
     }
 
     private void MoveChips()
@@ -138,22 +144,28 @@ public class Chip : MonoBehaviour
         {
             GameObject leftChip1 = board.allChips[column - 1, row];
             GameObject rightChip1 = board.allChips[column + 1, row];
-            if(leftChip1.tag == gameObject.tag && rightChip1.tag == gameObject.tag)
+            if (leftChip1 != null && rightChip1 != null)
             {
-                isMatched = true;
-                leftChip1.GetComponent<Chip>().isMatched = true;
-                rightChip1.GetComponent<Chip>().isMatched = true;
+                if (leftChip1.tag == gameObject.tag && rightChip1.tag == gameObject.tag)
+                {
+                    isMatched = true;
+                    leftChip1.GetComponent<Chip>().isMatched = true;
+                    rightChip1.GetComponent<Chip>().isMatched = true;
+                }
             }
         }
         if (row > 0 && row < board.height - 1)
         {
             GameObject upperChip1 = board.allChips[column, row + 1];
             GameObject lowerChip1 = board.allChips[column, row - 1];
-            if(upperChip1.tag == gameObject.tag && lowerChip1.tag == gameObject.tag)
+            if (upperChip1 != null && lowerChip1 != null)
             {
-                isMatched = true;
-                upperChip1.GetComponent<Chip>().isMatched = true;
-                lowerChip1.GetComponent<Chip>().isMatched = true;
+                if (upperChip1.tag == gameObject.tag && lowerChip1.tag == gameObject.tag)
+                {
+                    isMatched = true;
+                    upperChip1.GetComponent<Chip>().isMatched = true;
+                    lowerChip1.GetComponent<Chip>().isMatched = true;
+                }
             }
         }
     }

@@ -17,19 +17,17 @@ public class Chip : MonoBehaviour
     public float swipeAngle = 0;
     public float swipeResist = 1f;
     public bool isMatched = false;
+    MatchFinder matchFinder;
 
     private void Start()
     {
         board = FindObjectOfType<Board>();
-       // targetX = (int)transform.position.x;
-       // targetY = (int)transform.position.y;
-       // row = targetY;
-       // column = targetX;
+        matchFinder = FindObjectOfType<MatchFinder>();
     }
 
     private void Update()
     {
-        FindMatches();
+       // FindMatches();
         if (isMatched)
         {
             GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 100f);
@@ -46,6 +44,7 @@ public class Chip : MonoBehaviour
             {
                 board.allChips[column, row] = gameObject;
             }
+            matchFinder.FindAllMatches();
         }
         else
         {
@@ -63,6 +62,7 @@ public class Chip : MonoBehaviour
             {
                 board.allChips[column, row] = gameObject;
             }
+            matchFinder.FindAllMatches();
         }
         else
         {
@@ -84,6 +84,8 @@ public class Chip : MonoBehaviour
                 otherChip.GetComponent<Chip>().column = column;
                 row = previousRow;
                 column = previousColumn;
+                yield return new WaitForSeconds(0.5f);
+                board.currentState = GameState.move;
             }
             else
             {
@@ -94,13 +96,19 @@ public class Chip : MonoBehaviour
     }
     private void OnMouseDown()
     {
-        firstTouchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        if (board.currentState == GameState.move)
+        {
+            firstTouchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        }
     }
 
     private void OnMouseUp()
     {
-        finalTouchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        CalculateAngle();
+        if(board.currentState == GameState.move)
+        {
+            finalTouchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            CalculateAngle();
+        }
     }
 
     private void CalculateAngle()
@@ -110,6 +118,11 @@ public class Chip : MonoBehaviour
         {
             swipeAngle = Mathf.Atan2(finalTouchPosition.y - firstTouchPosition.y, finalTouchPosition.x - firstTouchPosition.x) * 180 / Mathf.PI;
             MoveChips();
+            board.currentState = GameState.wait;
+        }
+        else
+        {
+            board.currentState = GameState.move;
         }
     }
 
@@ -153,37 +166,5 @@ public class Chip : MonoBehaviour
         }
 
         StartCoroutine(CheckMove());
-    }
-
-    private void FindMatches()
-    {
-        if (column > 0 && column < board.width - 1)
-        {
-            GameObject leftChip1 = board.allChips[column - 1, row];
-            GameObject rightChip1 = board.allChips[column + 1, row];
-            if (leftChip1 != null && rightChip1 != null)
-            {
-                if (leftChip1.tag == gameObject.tag && rightChip1.tag == gameObject.tag)
-                {
-                    isMatched = true;
-                    leftChip1.GetComponent<Chip>().isMatched = true;
-                    rightChip1.GetComponent<Chip>().isMatched = true;
-                }
-            }
-        }
-        if (row > 0 && row < board.height - 1)
-        {
-            GameObject upperChip1 = board.allChips[column, row + 1];
-            GameObject lowerChip1 = board.allChips[column, row - 1];
-            if (upperChip1 != null && lowerChip1 != null)
-            {
-                if (upperChip1.tag == gameObject.tag && lowerChip1.tag == gameObject.tag)
-                {
-                    isMatched = true;
-                    upperChip1.GetComponent<Chip>().isMatched = true;
-                    lowerChip1.GetComponent<Chip>().isMatched = true;
-                }
-            }
-        }
     }
 }

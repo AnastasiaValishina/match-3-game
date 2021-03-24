@@ -1,11 +1,15 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using UnityEditor;
 using UnityEngine;
+
+public enum GameState
+{
+    wait,
+    move
+}
 
 public class Board : MonoBehaviour
 {
+    public GameState currentState = GameState.move;
     public int width = 8;
     public int height = 8;
     public int offset = 10;
@@ -13,12 +17,14 @@ public class Board : MonoBehaviour
     public GameObject[] chips;
     public GameObject[,] allChips;
 
-    BackgroundTile[,] allTiles; 
+    BackgroundTile[,] allTiles;
+    MatchFinder matchFinder;
 
     void Start()
     {
         allTiles = new BackgroundTile[width, height];
         allChips = new GameObject[width, height];
+        matchFinder = FindObjectOfType<MatchFinder>();
         SetUp();
     }
 
@@ -90,6 +96,7 @@ public class Board : MonoBehaviour
     {
         if (allChips[column, row].GetComponent<Chip>().isMatched)
         {
+            matchFinder.currentMatches.Remove(allChips[column, row]);
             Destroy(allChips[column, row]);
             allChips[column, row] = null;
         } 
@@ -180,5 +187,8 @@ public class Board : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
             DestroyMatches();
         }
+
+        yield return new WaitForSeconds(0.5f);
+        currentState = GameState.move;
     }
 }

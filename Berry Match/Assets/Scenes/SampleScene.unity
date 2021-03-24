@@ -247,6 +247,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c126c3faf42a22347a0b61d3af90c2b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentState: 1
   width: 7
   height: 10
   offset: 20
@@ -258,3 +259,47 @@ MonoBehaviour:
   - {fileID: 3278900296866047159, guid: 83d46809405c63a4b8c8287b15771c50, type: 3}
   - {fileID: 6865011872285728576, guid: aa699f600d51c9e4a95a4797d5c99b80, type: 3}
   - {fileID: 6722824701471489412, guid: 1cc6c48c5dfd2b341ada5c6030c69606, type: 3}
+--- !u!1 &1968910940
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1968910941}
+  - component: {fileID: 1968910942}
+  m_Layer: 0
+  m_Name: MatchFinder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1968910941
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1968910940}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1968910942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1968910940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac569fd356a3a65418518c9ee41745a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentMatches: []

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Data;
 using UnityEngine;
 
 public enum GameState
@@ -16,6 +17,7 @@ public class Board : MonoBehaviour
     public GameObject tilePrefab;
     public GameObject[] chips;
     public GameObject[,] allChips;
+    public GameObject destroyEffect;
 
     BackgroundTile[,] allTiles;
     MatchFinder matchFinder;
@@ -97,6 +99,8 @@ public class Board : MonoBehaviour
         if (allChips[column, row].GetComponent<Chip>().isMatched)
         {
             matchFinder.currentMatches.Remove(allChips[column, row]);
+            GameObject particle = Instantiate(destroyEffect, allChips[column, row].transform.position, Quaternion.identity);
+            Destroy(particle, 1f);
             Destroy(allChips[column, row]);
             allChips[column, row] = null;
         } 

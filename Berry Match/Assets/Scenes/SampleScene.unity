@@ -259,6 +259,8 @@ MonoBehaviour:
   - {fileID: 3278900296866047159, guid: 83d46809405c63a4b8c8287b15771c50, type: 3}
   - {fileID: 6865011872285728576, guid: aa699f600d51c9e4a95a4797d5c99b80, type: 3}
   - {fileID: 6722824701471489412, guid: 1cc6c48c5dfd2b341ada5c6030c69606, type: 3}
+  destroyEffect: {fileID: 6510921329843599876, guid: 30035353e208e614caf8a529a52f7402,
+    type: 3}
 --- !u!1 &1968910940
 GameObject:
   m_ObjectHideFlags: 0

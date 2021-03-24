@@ -52,3 +52,6 @@ TagManager:
   - name: Chips
     uniqueID: 3656885767
     locked: 0
+  - name: Boosters
+    uniqueID: 1205332589
+    locked: 0

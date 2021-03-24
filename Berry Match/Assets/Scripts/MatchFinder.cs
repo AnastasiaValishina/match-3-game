@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class MatchFinder : MonoBehaviour
 {
@@ -35,6 +37,29 @@ public class MatchFinder : MonoBehaviour
                         {
                             if (leftChip.tag == currentChip.tag && rightChip.tag == currentChip.tag)
                             {
+                                if (currentChip.GetComponent<Chip>().isRowArrow || 
+                                    leftChip.GetComponent<Chip>().isRowArrow ||
+                                    rightChip.GetComponent<Chip>().isRowArrow)
+                                {
+                                    currentMatches.Union(GetRowChips(j));
+                                }
+
+                                if (currentChip.GetComponent<Chip>().isColumnArrow)
+                                {
+                                    currentMatches.Union(GetColumnChips(i));
+                                }
+
+                                if (leftChip.GetComponent<Chip>().isColumnArrow)
+                                {
+                                    currentMatches.Union(GetColumnChips(i - 1));
+                                }
+
+                                if (rightChip.GetComponent<Chip>().isColumnArrow)
+                                {
+                                    currentMatches.Union(GetColumnChips(i + 1));
+                                }
+
+
                                 if (!currentMatches.Contains(leftChip))
                                 {
                                     currentMatches.Add(leftChip);
@@ -63,6 +88,29 @@ public class MatchFinder : MonoBehaviour
                         {
                             if (upperChip.tag == currentChip.tag && lowerChip.tag == currentChip.tag)
                             {
+                                if (currentChip.GetComponent<Chip>().isColumnArrow ||
+                                    upperChip.GetComponent<Chip>().isColumnArrow ||
+                                    lowerChip.GetComponent<Chip>().isColumnArrow)
+                                {
+                                    currentMatches.Union(GetColumnChips(i));
+                                }
+
+                                if (currentChip.GetComponent<Chip>().isRowArrow)
+                                {
+                                    currentMatches.Union(GetRowChips(j));
+                                }
+
+                                if (upperChip.GetComponent<Chip>().isRowArrow)
+                                {
+                                    currentMatches.Union(GetRowChips(j + 1));
+                                }
+
+                                if (lowerChip.GetComponent<Chip>().isRowArrow)
+                                {
+                                    currentMatches.Union(GetRowChips(j - 1));
+                                }
+
+
                                 if (!currentMatches.Contains(upperChip))
                                 {
                                     currentMatches.Add(upperChip);
@@ -87,5 +135,33 @@ public class MatchFinder : MonoBehaviour
                 }
             }
         }
+    }
+
+    List<GameObject> GetColumnChips(int column)
+    {
+        List<GameObject> chips = new List<GameObject>();
+        for (int i = 0; i < board.height; i++)
+        {
+            if (board.allChips[column, i] != null)
+            {
+                chips.Add(board.allChips[column, i]);
+                board.allChips[column, i].GetComponent<Chip>().isMatched = true; ;
+            }
+        }
+        return chips;
+    }
+    
+    List<GameObject> GetRowChips(int row)
+    {
+        List<GameObject> chips = new List<GameObject>();
+        for (int i = 0; i < board.width; i++)
+        {
+            if (board.allChips[i, row] != null)
+            {
+                chips.Add(board.allChips[i, row]);
+                board.allChips[i, row].GetComponent<Chip>().isMatched = true; ;
+            }
+        }
+        return chips;
     }
 }

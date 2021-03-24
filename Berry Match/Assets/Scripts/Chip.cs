@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Chip : MonoBehaviour
@@ -10,19 +9,34 @@ public class Chip : MonoBehaviour
     public int targetX, targetY;
 
     Board board;
+    MatchFinder matchFinder;
     GameObject otherChip;
+
     Vector2 firstTouchPosition;
     Vector2 finalTouchPosition;
     Vector2 tempPosition;
     public float swipeAngle = 0;
     public float swipeResist = 1f;
     public bool isMatched = false;
-    MatchFinder matchFinder;
+    public bool isColumnArrow = false;
+    public bool isRowArrow = false;
+    public GameObject rowArrow;
+    public GameObject columnArrow;
 
     private void Start()
     {
         board = FindObjectOfType<Board>();
         matchFinder = FindObjectOfType<MatchFinder>();
+    }
+
+    private void OnMouseOver()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            isRowArrow = true;
+            GameObject arrow = Instantiate(rowArrow, transform.position, Quaternion.identity);
+            arrow.transform.parent = transform;
+        }
     }
 
     private void Update()

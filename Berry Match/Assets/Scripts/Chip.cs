@@ -20,8 +20,10 @@ public class Chip : MonoBehaviour
     public bool isMatched = false;
     public bool isColumnArrow = false;
     public bool isRowArrow = false;
+    public bool isColorBomb;
     public GameObject rowArrow;
     public GameObject columnArrow;
+    public GameObject colorBomb;
 
     private void Start()
     {
@@ -33,9 +35,9 @@ public class Chip : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1))
         {
-            isRowArrow = true;
-            GameObject arrow = Instantiate(rowArrow, transform.position, Quaternion.identity);
-            arrow.transform.parent = transform;
+            isColorBomb = true;
+            GameObject colorB = Instantiate(colorBomb, transform.position, Quaternion.identity);
+            colorB.transform.parent = transform;
         }
     }
 
@@ -89,6 +91,16 @@ public class Chip : MonoBehaviour
 
     public IEnumerator CheckMove()
     {
+        if (isColorBomb)
+        {
+            matchFinder.MatchChipsOfColor(otherChip.tag);
+            isMatched = true;
+        }
+        else if (otherChip.GetComponent<Chip>().isColorBomb)
+        {
+            matchFinder.MatchChipsOfColor(gameObject.tag);
+            otherChip.GetComponent<Chip>().isMatched = true;
+        }
         yield return new WaitForSeconds(0.5f);
         if (otherChip != null)
         {

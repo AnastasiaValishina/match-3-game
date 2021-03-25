@@ -136,6 +136,20 @@ public class MatchFinder : MonoBehaviour
         }
     }
 
+    public void MatchChipsOfColor(string color)
+    {
+        for (int i = 0; i < board.width; i++)
+        {
+            for (int j = 0; j < board.height; j++)
+            {
+                if (board.allChips[i, j].tag == color)
+                {
+                    board.allChips[i, j].GetComponent<Chip>().isMatched = true;
+                }
+            }
+        }
+    }
+
     List<GameObject> GetColumnChips(int column)
     {
         List<GameObject> chips = new List<GameObject>();

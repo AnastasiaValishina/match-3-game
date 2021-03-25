@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -163,5 +162,44 @@ public class MatchFinder : MonoBehaviour
             }
         }
         return chips;
+    }
+
+    public void CheckForBoosters()
+    {
+        if (board.currentChip != null)
+        {
+            if (board.currentChip.isMatched)
+            {
+                board.currentChip.isMatched = false;
+
+            if ((board.currentChip.swipeAngle > -45 && board.currentChip.swipeAngle <= 45) ||
+                 board.currentChip.swipeAngle > -135 || board.currentChip.swipeAngle <= 135)
+                {
+                    board.currentChip.MakeRowBomb();
+                }
+                else
+                {
+                    board.currentChip.MakeColumnBomb();
+                }
+            }
+            else if (board.currentChip.otherChip != null)
+            {
+                Chip otherChip = board.currentChip.otherChip.GetComponent<Chip>();
+                if (otherChip.isMatched)
+                {
+                    otherChip.isMatched = false;
+                }
+
+                if ((board.currentChip.swipeAngle > -45 && board.currentChip.swipeAngle <= 45) ||
+                     board.currentChip.swipeAngle > -135 || board.currentChip.swipeAngle <= 135)
+                {
+                    otherChip.MakeRowBomb();
+                }
+                else
+                {
+                    otherChip.MakeColumnBomb();
+                }
+            }
+        }
     }
 }

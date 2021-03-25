@@ -18,6 +18,8 @@ public class Board : MonoBehaviour
     public GameObject[] chips;
     public GameObject[,] allChips;
     public GameObject destroyEffect;
+    public Chip currentChip;
+
 
     BackgroundTile[,] allTiles;
     MatchFinder matchFinder;
@@ -98,6 +100,11 @@ public class Board : MonoBehaviour
     {
         if (allChips[column, row].GetComponent<Chip>().isMatched)
         {
+            if (matchFinder.currentMatches.Count == 4 || matchFinder.currentMatches.Count == 7)
+            {
+                matchFinder.CheckForBoosters();
+            }
+
             matchFinder.currentMatches.Remove(allChips[column, row]);
             GameObject particle = Instantiate(destroyEffect, allChips[column, row].transform.position, Quaternion.identity);
             Destroy(particle, 1f);
@@ -192,6 +199,8 @@ public class Board : MonoBehaviour
             DestroyMatches();
         }
 
+        matchFinder.currentMatches.Clear();
+        currentChip = null;
         yield return new WaitForSeconds(0.5f);
         currentState = GameState.move;
     }

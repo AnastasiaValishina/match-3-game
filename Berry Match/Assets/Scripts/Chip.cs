@@ -10,7 +10,7 @@ public class Chip : MonoBehaviour
 
     Board board;
     MatchFinder matchFinder;
-    GameObject otherChip;
+    public GameObject otherChip;
 
     Vector2 firstTouchPosition;
     Vector2 finalTouchPosition;
@@ -42,10 +42,10 @@ public class Chip : MonoBehaviour
     private void Update()
     {
        // FindMatches();
-        if (isMatched)
-        {
-            GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 100f);
-        }
+      //  if (isMatched)
+       // {
+       //     GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 100f);
+      //  }
 
         targetX = column;
         targetY = row;
@@ -99,13 +99,14 @@ public class Chip : MonoBehaviour
                 row = previousRow;
                 column = previousColumn;
                 yield return new WaitForSeconds(0.5f);
+                board.currentChip = null;
                 board.currentState = GameState.move;
             }
             else
             {
                 board.DestroyMatches();
             }
-            otherChip = null;
+            //otherChip = null;
         }
     }
     private void OnMouseDown()
@@ -133,6 +134,7 @@ public class Chip : MonoBehaviour
             swipeAngle = Mathf.Atan2(finalTouchPosition.y - firstTouchPosition.y, finalTouchPosition.x - firstTouchPosition.x) * 180 / Mathf.PI;
             MoveChips();
             board.currentState = GameState.wait;
+            board.currentChip = this;
         }
         else
         {
@@ -180,5 +182,19 @@ public class Chip : MonoBehaviour
         }
 
         StartCoroutine(CheckMove());
+    }
+
+    public void MakeRowBomb()
+    {
+        isRowArrow = true;
+        GameObject arrow = Instantiate(rowArrow, transform.position, Quaternion.identity);
+        arrow.transform.parent = transform;
+    }
+    
+    public void MakeColumnBomb()
+    {
+        isColumnArrow = true;
+        GameObject arrow = Instantiate(columnArrow, transform.position, Quaternion.identity);
+        arrow.transform.parent = transform;
     }
 }

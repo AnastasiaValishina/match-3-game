@@ -105,7 +105,6 @@ public class Board : MonoBehaviour
                 matchFinder.CheckForBoosters();
             }
 
-            matchFinder.currentMatches.Remove(allChips[column, row]);
             GameObject particle = Instantiate(destroyEffect, allChips[column, row].transform.position, Quaternion.identity);
             Destroy(particle, 1f);
             Destroy(allChips[column, row]);
@@ -125,6 +124,7 @@ public class Board : MonoBehaviour
                 }
             }
         }
+        matchFinder.currentMatches.Clear();
         StartCoroutine(DecreaseRow());
     }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System.Security.Authentication;
 
 public class MatchFinder : MonoBehaviour
 {
@@ -16,6 +17,27 @@ public class MatchFinder : MonoBehaviour
     public void FindAllMatches()
     {
         StartCoroutine(FindAllMatchesCo());
+    }
+
+    private List<GameObject> IsBomb(Chip chip1, Chip chip2, Chip chip3)
+    {
+        List<GameObject> currentChips = new List<GameObject>();
+
+        if (chip1.isBomb)
+        {
+            currentMatches.Union(GetAdjacentChips(chip1.column, chip1.row));
+        }
+
+        if (chip2.isBomb)
+        {
+            currentMatches.Union(GetAdjacentChips(chip2.column, chip2.row));
+        }
+
+        if (chip3.isBomb)
+        {
+            currentMatches.Union(GetAdjacentChips(chip3.column, chip3.row));
+        }
+        return currentChips;
     }
 
     private List<GameObject> IsRowArrow(Chip chip1, Chip chip2, Chip chip3)
@@ -103,6 +125,8 @@ public class MatchFinder : MonoBehaviour
 
                                 currentMatches.Union(IsColumnArrow(leftChipScript, currentChipScript, rightChipScript));
 
+                                currentMatches.Union(IsBomb(leftChipScript, currentChipScript, rightChipScript));
+
                                 GetNearbyChips(leftChip, currentChip, rightChip);
                             }
                         }
@@ -122,6 +146,8 @@ public class MatchFinder : MonoBehaviour
                                 currentMatches.Union(IsColumnArrow(upperChipScript, currentChipScript, lowerChipScript));
 
                                 currentMatches.Union(IsRowArrow(upperChipScript, currentChipScript, lowerChipScript));
+
+                                currentMatches.Union(IsBomb(upperChipScript, currentChipScript, lowerChipScript));
 
                                 GetNearbyChips(upperChip, currentChip, lowerChip);
                             }
@@ -144,6 +170,23 @@ public class MatchFinder : MonoBehaviour
                 }
             }
         }
+    }
+
+    List <GameObject> GetAdjacentChips(int column, int row)
+    {
+        List<GameObject> chips = new List<GameObject>();
+        for (int i = column - 1; i <= column + 1; i++)
+        {
+            for (int j = row - 1; j <= row + 1; j++)
+            {
+                if (i >= 0 && i < board.width && j >= 0 && j < board.height)
+                {
+                    chips.Add(board.allChips[i, j]);
+                    board.allChips[i, j].GetComponent<Chip>().isMatched = true;
+                }
+            }
+        }
+        return chips;
     }
 
     List<GameObject> GetColumnChips(int column)

@@ -134,9 +134,12 @@ MonoBehaviour:
   isColumnArrow: 0
   isRowArrow: 0
   isColorBomb: 0
-  rowArrow: {fileID: 6398824908183710723, guid: d2bb1b10cabe4c2458687cf95d3ac9db,
+  isBomb: 0
+  rowArrowPrefab: {fileID: 6398824908183710723, guid: d2bb1b10cabe4c2458687cf95d3ac9db,
     type: 3}
-  columnArrow: {fileID: 2497831096530255126, guid: 0ff51d92187daad4cbe81049d7942670,
+  columnArrowPrefab: {fileID: 2497831096530255126, guid: 0ff51d92187daad4cbe81049d7942670,
     type: 3}
-  colorBomb: {fileID: 2904739406320416232, guid: bb1e77c3adc827c4abc10b8de68c2969,
+  colorBombPrefab: {fileID: 2904739406320416232, guid: bb1e77c3adc827c4abc10b8de68c2969,
+    type: 3}
+  bombPrefab: {fileID: 618999249293769740, guid: 723164b5db33d5348a5bde523162fd17,
     type: 3}

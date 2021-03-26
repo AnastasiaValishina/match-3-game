@@ -17,13 +17,17 @@ public class Chip : MonoBehaviour
     Vector2 tempPosition;
     public float swipeAngle = 0;
     public float swipeResist = 1f;
+
     public bool isMatched = false;
     public bool isColumnArrow = false;
     public bool isRowArrow = false;
-    public bool isColorBomb;
-    public GameObject rowArrow;
-    public GameObject columnArrow;
-    public GameObject colorBomb;
+    public bool isColorBomb = false;
+    public bool isBomb = false;
+
+    public GameObject rowArrowPrefab;
+    public GameObject columnArrowPrefab;
+    public GameObject colorBombPrefab;
+    public GameObject bombPrefab;
 
     private void Start()
     {
@@ -35,9 +39,9 @@ public class Chip : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1))
         {
-            isColorBomb = true;
-            GameObject colorB = Instantiate(colorBomb, transform.position, Quaternion.identity);
-            colorB.transform.parent = transform;
+            isBomb = true;
+            GameObject bomb = Instantiate(bombPrefab, transform.position, Quaternion.identity);
+            bomb.transform.parent = transform;
         }
     }
 
@@ -199,14 +203,14 @@ public class Chip : MonoBehaviour
     public void MakeRowBomb()
     {
         isRowArrow = true;
-        GameObject arrow = Instantiate(rowArrow, transform.position, Quaternion.identity);
+        GameObject arrow = Instantiate(rowArrowPrefab, transform.position, Quaternion.identity);
         arrow.transform.parent = transform;
     }
     
     public void MakeColumnBomb()
     {
         isColumnArrow = true;
-        GameObject arrow = Instantiate(columnArrow, transform.position, Quaternion.identity);
+        GameObject arrow = Instantiate(columnArrowPrefab, transform.position, Quaternion.identity);
         arrow.transform.parent = transform;
     }
 }

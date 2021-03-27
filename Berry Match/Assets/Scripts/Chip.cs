@@ -39,8 +39,8 @@ public class Chip : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1))
         {
-            isBomb = true;
-            GameObject bomb = Instantiate(bombPrefab, transform.position, Quaternion.identity);
+            isColorBomb = true;
+            GameObject bomb = Instantiate(colorBombPrefab, transform.position, Quaternion.identity);
             bomb.transform.parent = transform;
         }
     }
@@ -147,9 +147,9 @@ public class Chip : MonoBehaviour
         if (Mathf.Abs(finalTouchPosition.y - firstTouchPosition.y) > swipeResist || 
             Mathf.Abs(finalTouchPosition.x - firstTouchPosition.x) > swipeResist)
         {
-            swipeAngle = Mathf.Atan2(finalTouchPosition.y - firstTouchPosition.y, finalTouchPosition.x - firstTouchPosition.x) * 180 / Mathf.PI;
-            MoveChips();
             board.currentState = GameState.wait;
+            swipeAngle = Mathf.Atan2(finalTouchPosition.y - firstTouchPosition.y, finalTouchPosition.x - firstTouchPosition.x) * 180 / Mathf.PI;
+            Swipe();
             board.currentChip = this;
         }
         else
@@ -158,46 +158,40 @@ public class Chip : MonoBehaviour
         }
     }
 
-    private void MoveChips()
+    void MoveChips(Vector2 direction)
+    {
+        otherChip = board.allChips[column + (int)direction.x, row + (int)direction.y];
+        previousRow = row;
+        previousColumn = column;
+        otherChip.GetComponent<Chip>().column += - 1 * (int)direction.x;
+        otherChip.GetComponent<Chip>().row += -1 * (int)direction.y;
+        column += (int)direction.x;
+        row += (int)direction.y;
+        StartCoroutine(CheckMove());
+    }
+
+    private void Swipe()
     {
         if (swipeAngle > -45 && swipeAngle <= 45 && column < board.width - 1)
         {
-            // right swipe
-            otherChip = board.allChips[column + 1, row];
-            previousRow = row;
-            previousColumn = column;
-            otherChip.GetComponent<Chip>().column -= 1;
-            column += 1;
+            MoveChips(Vector2.right);
         }
         else if (swipeAngle > 45 && swipeAngle <= 135 && row < board.height - 1)
         {
-            // up swipe
-            otherChip = board.allChips[column, row + 1];
-            previousRow = row;
-            previousColumn = column;
-            otherChip.GetComponent<Chip>().row -= 1;
-            row += 1;
+            MoveChips(Vector2.up);
         }
         else if ((swipeAngle > 135 || swipeAngle <= -135) && column > 0)
         {
-            // left swipe
-            otherChip = board.allChips[column - 1, row];
-            previousRow = row;
-            previousColumn = column;
-            otherChip.GetComponent<Chip>().column += 1;
-            column -= 1;
+            MoveChips(Vector2.left);
         }
         else if (swipeAngle < 45 && swipeAngle >= -135 && row > 0)
         {
-            // down swipe
-            otherChip = board.allChips[column, row - 1];
-            previousRow = row;
-            previousColumn = column;
-            otherChip.GetComponent<Chip>().row += 1;
-            row -= 1;
+            MoveChips(Vector2.down);
         }
-
-        StartCoroutine(CheckMove());
+        else
+        {
+            board.currentState = GameState.move;
+        }
     }
 
     public void MakeRowBomb()
@@ -212,5 +206,19 @@ public class Chip : MonoBehaviour
         isColumnArrow = true;
         GameObject arrow = Instantiate(columnArrowPrefab, transform.position, Quaternion.identity);
         arrow.transform.parent = transform;
+    }
+
+    public void MakeColorBomb()
+    {
+        isColorBomb = true;
+        GameObject rainbowBomb = Instantiate(colorBombPrefab, transform.position, Quaternion.identity);
+        rainbowBomb.transform.parent = transform;
+    }
+
+    public void MakeAdjacentBomb()
+    {
+        isBomb = true;
+        GameObject bomb = Instantiate(bombPrefab, transform.position, Quaternion.identity);
+        bomb.transform.parent = transform;
     }
 }

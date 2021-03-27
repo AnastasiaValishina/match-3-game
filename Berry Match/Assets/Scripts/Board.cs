@@ -96,13 +96,109 @@ public class Board : MonoBehaviour
         return false;
     }
 
+    private bool ColumnOrRow()
+    {
+        int numberHorizontal = 0;
+        int numberVertical = 0;
+        Chip firstChip = matchFinder.currentMatches[0].GetComponent<Chip>();
+
+        if (firstChip != null)
+        {
+            foreach (GameObject currentChip in matchFinder.currentMatches)
+            {
+                Chip chip = currentChip.GetComponent<Chip>();
+                if (chip.row == firstChip.row)
+                {
+                    numberHorizontal++;
+                }
+                if (chip.column == firstChip.column)
+                {
+                    numberVertical++;
+                }
+            }
+        }
+        return numberVertical == 5 || numberHorizontal == 5;
+    }
+
+    private void CheckToMakeBombs()
+    {
+        if (matchFinder.currentMatches.Count == 4 || matchFinder.currentMatches.Count == 7)
+        {
+            matchFinder.CheckForBoosters();
+        }
+
+        if (matchFinder.currentMatches.Count == 5 || matchFinder.currentMatches.Count == 8)
+        {
+            if (ColumnOrRow())
+            {
+                // make rainbow bomb
+                if (currentChip != null)
+                {
+                    if (currentChip.isMatched)
+                    {
+                        if (!currentChip.isColorBomb)
+                        {
+                            currentChip.isMatched = false;
+                            currentChip.MakeColorBomb();
+                        }
+                    }
+                    else
+                    {
+                        if (currentChip.otherChip != null)
+                        {
+                            Chip otherChip = currentChip.otherChip.GetComponent<Chip>();
+                            if (otherChip.isMatched)
+                            {
+                                if (!otherChip.isColorBomb)
+                                {
+                                    otherChip.isMatched = false;
+                                    otherChip.MakeColorBomb();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // make a bomb
+                if (currentChip != null)
+                {
+                    if (currentChip.isMatched)
+                    {
+                        if (!currentChip.isBomb)
+                        {
+                            currentChip.isMatched = false;
+                            currentChip.MakeAdjacentBomb();
+                        }
+                    }
+                    else
+                    {
+                        if (currentChip.otherChip != null)
+                        {
+                            Chip otherChip = currentChip.otherChip.GetComponent<Chip>();
+                            if (otherChip.isMatched)
+                            {
+                                if (!otherChip.isBomb)
+                                {
+                                    otherChip.isMatched = false;
+                                    otherChip.MakeAdjacentBomb();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     void DestroyMatchesAt(int column, int row)
     {
         if (allChips[column, row].GetComponent<Chip>().isMatched)
         {
-            if (matchFinder.currentMatches.Count == 4 || matchFinder.currentMatches.Count == 7)
+            if (matchFinder.currentMatches.Count >= 4)
             {
-                matchFinder.CheckForBoosters();
+                CheckToMakeBombs();
             }
 
             GameObject particle = Instantiate(destroyEffect, allChips[column, row].transform.position, Quaternion.identity);

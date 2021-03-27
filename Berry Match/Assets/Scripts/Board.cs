@@ -1,11 +1,26 @@
 ﻿using System.Collections;
-using System.Data;
 using UnityEngine;
 
 public enum GameState
 {
     wait,
     move
+}
+
+public enum TileKind
+{
+    Breakable,
+    Blank,
+    Normal
+
+}
+
+[System.Serializable]
+public class TileType
+{
+    public int x;
+    public int y;
+    public TileKind tileKind;
 }
 
 public class Board : MonoBehaviour
@@ -19,46 +34,62 @@ public class Board : MonoBehaviour
     public GameObject[,] allChips;
     public GameObject destroyEffect;
     public Chip currentChip;
+    public TileType[] boardLayout;
 
-
-    BackgroundTile[,] allTiles;
+    bool[,] blankSpaces;
     MatchFinder matchFinder;
 
     void Start()
     {
-        allTiles = new BackgroundTile[width, height];
+        blankSpaces = new bool[width, height];
         allChips = new GameObject[width, height];
         matchFinder = FindObjectOfType<MatchFinder>();
         SetUp();
     }
 
+    public void GenerateBlanckSpaces()
+    {
+        for (int i = 0; i < boardLayout.Length; i++)
+        {
+            if (boardLayout[i].tileKind == TileKind.Blank)
+            {
+                blankSpaces[boardLayout[i].x, boardLayout[i].y] = true;
+            }
+        }
+    }
+
     void SetUp()
     {
+        GenerateBlanckSpaces();
+
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)
             {
-                Vector2 tilePosition = new Vector2(i, j);
-                GameObject backgroundTile = Instantiate(tilePrefab, tilePosition, Quaternion.identity) as GameObject;
-                backgroundTile.transform.parent = transform;
-                backgroundTile.name = "( " + i + ", " + j + " )";
-
-                Vector2 chipPosition = new Vector2(i, j + offset);
-                int randomChip = Random.Range(0, chips.Length);
-                int maxIterations = 0;
-                while (MatchesAt(i, j, chips[randomChip]) && maxIterations < 100)
+                if (!blankSpaces[i, j])
                 {
-                    randomChip = Random.Range(0, chips.Length);
-                    maxIterations++;
-                }
-                maxIterations = 0;
-                GameObject chip = Instantiate(chips[randomChip], chipPosition, Quaternion.identity);
-                chip.GetComponent<Chip>().row = j;
-                chip.GetComponent<Chip>().column = i;
+                    Vector2 tilePosition = new Vector2(i, j);
+                    GameObject backgroundTile = Instantiate(tilePrefab, tilePosition, Quaternion.identity) as GameObject;
+                    backgroundTile.transform.parent = transform;
+                    backgroundTile.name = "( " + i + ", " + j + " )";
 
-                chip.transform.parent = transform;
-                chip.name = "( " + i + ", " + j + " )";
-                allChips[i, j] = chip;
+                    Vector2 chipPosition = new Vector2(i, j + offset);
+                    int randomChip = Random.Range(0, chips.Length);
+                    int maxIterations = 0;
+                    while (MatchesAt(i, j, chips[randomChip]) && maxIterations < 100)
+                    {
+                        randomChip = Random.Range(0, chips.Length);
+                        maxIterations++;
+                    }
+                    maxIterations = 0;
+                    GameObject chip = Instantiate(chips[randomChip], chipPosition, Quaternion.identity);
+                    chip.GetComponent<Chip>().row = j;
+                    chip.GetComponent<Chip>().column = i;
+
+                    chip.transform.parent = transform;
+                    chip.name = "( " + i + ", " + j + " )";
+                    allChips[i, j] = chip;
+                }
             } 
         }
     }
@@ -67,29 +98,42 @@ public class Board : MonoBehaviour
     {
         if (column > 1 && row > 1)
         {
-            if (allChips[column - 1, row].tag == chip.tag && allChips[column - 2, row].tag == chip.tag)
+            if (allChips[column - 1, row] != null && allChips[column - 2, row] != null)
             {
-                return true;
+                if (allChips[column - 1, row].tag == chip.tag && allChips[column - 2, row].tag == chip.tag)
+                {
+                    return true;
+                }
             }
-            if (allChips[column, row - 1].tag == chip.tag && allChips[column, row - 2].tag == chip.tag)
+
+            if (allChips[column, row - 1] != null && allChips[column, row - 2] != null)
             {
-                return true;
+                if (allChips[column, row - 1].tag == chip.tag && allChips[column, row - 2].tag == chip.tag)
+                {
+                    return true;
+                }
             }
         } 
         else if (column <= 1 || row <= 1)
         {
             if (row > 1)
             {
-                if(allChips[column, row -1].tag == chip.tag && allChips[column, row - 2].tag == chip.tag)
+                if (allChips[column, row - 1] != null && allChips[column, row - 2] != null)
                 {
-                    return true;
+                    if (allChips[column, row - 1].tag == chip.tag && allChips[column, row - 2].tag == chip.tag)
+                    {
+                        return true;
+                    }
                 }
             }
             if (column > 1)
             {
-                if(allChips[column - 1, row].tag == chip.tag && allChips[column - 2, row].tag == chip.tag)
+                if (allChips[column - 1, row] != null && allChips[column - 2, row] != null)
                 {
-                    return true;
+                    if (allChips[column - 1, row].tag == chip.tag && allChips[column - 2, row].tag == chip.tag)
+                    {
+                        return true;
+                    }
                 }
             }
         }
@@ -221,9 +265,32 @@ public class Board : MonoBehaviour
             }
         }
         matchFinder.currentMatches.Clear();
-        StartCoroutine(DecreaseRow());
+        StartCoroutine(DecreaseRow2());
     }
 
+    IEnumerator DecreaseRow2()
+    {
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                if (!blankSpaces[i, j] && allChips[i, j] == null)
+                {
+                    for (int k = j + 1; k < height; k++)
+                    {
+                        if (allChips[i, k] != null)
+                        {
+                            allChips[i, k].GetComponent<Chip>().row = j;
+                            allChips[i, k] = null;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        yield return new WaitForSeconds(0.5f);
+        StartCoroutine(FillBoard());
+    }
     IEnumerator DecreaseRow()
     {
         int nullCount = 0;
@@ -253,7 +320,7 @@ public class Board : MonoBehaviour
         {
             for (int j = 0; j < height; j++)
             {
-                if (allChips[i, j] == null)
+                if (allChips[i, j] == null && !blankSpaces[i, j])
                 {
                     Vector2 tempPosition = new Vector2(i, j + offset);
                     int randomChip = Random.Range(0, chips.Length);

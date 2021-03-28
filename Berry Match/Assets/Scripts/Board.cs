@@ -30,6 +30,7 @@ public class Board : MonoBehaviour
     public int height = 8;
     public int offset = 10;
     public GameObject tilePrefab;
+    public GameObject breakableTilePrefab;
     public GameObject[] chips;
     public GameObject[,] allChips;
     public GameObject destroyEffect;
@@ -38,11 +39,13 @@ public class Board : MonoBehaviour
 
     bool[,] blankSpaces;
     MatchFinder matchFinder;
+    BreakableTile[,] breakableTiles;
 
     void Start()
     {
-        blankSpaces = new bool[width, height];
         allChips = new GameObject[width, height];
+        blankSpaces = new bool[width, height];
+        breakableTiles = new BreakableTile[width, height]; 
         matchFinder = FindObjectOfType<MatchFinder>();
         SetUp();
     }
@@ -58,9 +61,23 @@ public class Board : MonoBehaviour
         }
     }
 
+    public void GenerateBreakableTiles()
+    {
+        for (int i = 0; i < boardLayout.Length; i++)
+        {
+            if (boardLayout[i].tileKind == TileKind.Breakable)
+            {
+                Vector2 tempPosition = new Vector2(boardLayout[i].x, boardLayout[i].y);
+                GameObject tile = Instantiate(breakableTilePrefab, tempPosition, Quaternion.identity);
+                breakableTiles[boardLayout[i].x, boardLayout[i].y] = tile.GetComponent<BreakableTile>();
+            }
+        }
+    }
+
     void SetUp()
     {
         GenerateBlanckSpaces();
+        GenerateBreakableTiles();
 
         for (int i = 0; i < width; i++)
         {
@@ -243,6 +260,15 @@ public class Board : MonoBehaviour
             if (matchFinder.currentMatches.Count >= 4)
             {
                 CheckToMakeBombs();
+            }
+
+            if (breakableTiles[column, row] != null)
+            {
+                breakableTiles[column, row].TakeDamage(1);
+                if (breakableTiles[column, row].hitPoints <= 0)
+                {
+                    breakableTiles[column, row] = null;
+                }
             }
 
             GameObject particle = Instantiate(destroyEffect, allChips[column, row].transform.position, Quaternion.identity);

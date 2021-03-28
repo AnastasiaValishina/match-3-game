@@ -164,7 +164,7 @@ public class MatchFinder : MonoBehaviour
         {
             for (int j = 0; j < board.height; j++)
             {
-                if (board.allChips[i, j].tag == color)
+                if (board.allChips[i, j] != null && board.allChips[i, j].tag == color)
                 {
                     board.allChips[i, j].GetComponent<Chip>().isMatched = true;
                 }

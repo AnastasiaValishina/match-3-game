@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum GameState
@@ -394,7 +395,7 @@ public class Board : MonoBehaviour
 
         if (IsDeadLocked())
         {
-            Debug.Log("No more moves!");
+            ShuffleBoard();
         }
 
         currentState = GameState.move;
@@ -479,5 +480,48 @@ public class Board : MonoBehaviour
             }
         }
         return true;        
+    }
+
+    void ShuffleBoard()
+    {
+        List<GameObject> currentBoard = new List<GameObject>();
+
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                if (allChips[i, j] != null)
+                {
+                    currentBoard.Add(allChips[i, j]);
+                }
+            }
+        }
+
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                if (!blankSpaces[i, j])
+                {
+                    int randomChip = Random.Range(0, currentBoard.Count);
+                    int maxIterations = 0;
+                    while (MatchesAt(i, j, currentBoard[randomChip]) && maxIterations < 100)
+                    {
+                        randomChip = Random.Range(0, currentBoard.Count);
+                        maxIterations++;
+                    }
+                    maxIterations = 0;
+                    Chip chip = currentBoard[randomChip].GetComponent<Chip>();
+                    chip.column = i;
+                    chip.row = j;
+                    allChips[i, j] = currentBoard[randomChip];
+                    currentBoard.Remove(currentBoard[randomChip]);
+                }
+            }                
+        }
+        if (IsDeadLocked())
+        {
+            ShuffleBoard();
+        }
     }
 }

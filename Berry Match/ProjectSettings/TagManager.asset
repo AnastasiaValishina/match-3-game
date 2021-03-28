@@ -49,6 +49,9 @@ TagManager:
   - name: BackgroundTiles
     uniqueID: 1512564503
     locked: 0
+  - name: BreakableTiles
+    uniqueID: 3917161121
+    locked: 0
   - name: Chips
     uniqueID: 3656885767
     locked: 0

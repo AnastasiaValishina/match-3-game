@@ -45,7 +45,7 @@ public class Board : MonoBehaviour
     {
         allChips = new GameObject[width, height];
         blankSpaces = new bool[width, height];
-        breakableTiles = new BreakableTile[width, height]; 
+        breakableTiles = new BreakableTile[width, height];
         matchFinder = FindObjectOfType<MatchFinder>();
         SetUp();
     }
@@ -107,7 +107,7 @@ public class Board : MonoBehaviour
                     chip.name = "( " + i + ", " + j + " )";
                     allChips[i, j] = chip;
                 }
-            } 
+            }
         }
     }
 
@@ -130,7 +130,7 @@ public class Board : MonoBehaviour
                     return true;
                 }
             }
-        } 
+        }
         else if (column <= 1 || row <= 1)
         {
             if (row > 1)
@@ -275,7 +275,7 @@ public class Board : MonoBehaviour
             Destroy(particle, 1f);
             Destroy(allChips[column, row]);
             allChips[column, row] = null;
-        } 
+        }
     }
 
     public void DestroyMatches()
@@ -327,7 +327,7 @@ public class Board : MonoBehaviour
                 if (allChips[i, j] == null)
                 {
                     nullCount++;
-                } 
+                }
                 else if (nullCount > 0)
                 {
                     allChips[i, j].GetComponent<Chip>().row -= nullCount;
@@ -361,13 +361,13 @@ public class Board : MonoBehaviour
 
     bool MatchesOnBoard()
     {
-        for(int i = 0; i < width; i++)
+        for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)
             {
                 if (allChips[i, j] != null)
                 {
-                    if(allChips[i, j].GetComponent<Chip>().isMatched)
+                    if (allChips[i, j].GetComponent<Chip>().isMatched)
                     {
                         return true;
                     }
@@ -391,6 +391,93 @@ public class Board : MonoBehaviour
         matchFinder.currentMatches.Clear();
         currentChip = null;
         yield return new WaitForSeconds(0.5f);
+
+        if (IsDeadLocked())
+        {
+            Debug.Log("No more moves!");
+        }
+
         currentState = GameState.move;
+    }
+
+    void SwitchChips(int column, int row, Vector2 direction)
+    {
+        GameObject holder = allChips[column + (int)direction.x, row + (int)direction.y] as GameObject;
+        allChips[column + (int)direction.x, row + (int)direction.y] = allChips[column, row];
+        allChips[column, row] = holder;
+    }
+
+    bool CheckForMatches()
+    {
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                if (allChips[i, j] != null)
+                {
+                    if (i < width - 2)
+                    {
+                        if (allChips[i + 1, j] != null && allChips[i + 2, j] != null)
+                        {
+                            if (allChips[i + 1, j].tag == allChips[i, j].tag && allChips[i + 2, j].tag == allChips[i, j].tag)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                    if (j < height - 2)
+                    {
+                        if (allChips[i, j + 1] != null && allChips[i, j + 2] != null)
+                        {
+                            if (allChips[i, j + 1].tag == allChips[i, j].tag && allChips[i, j + 2].tag == allChips[i, j].tag)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    bool SwitchAndCheck(int column, int row, Vector2 direction)
+    {
+        SwitchChips(column, row, direction);
+        if (CheckForMatches())
+        {
+            SwitchChips(column, row, direction);
+            return true;
+        }
+        SwitchChips(column, row, direction);
+        return false;
+    }
+
+    bool IsDeadLocked()
+    {
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                if (allChips[i, j] != null)
+                {
+                    if (i < width - 1)
+                    {
+                        if (SwitchAndCheck(i, j, Vector2.right))
+                        {
+                            return false;
+                        }
+                    }
+                    if (j < height - 1)
+                    {
+                        if (SwitchAndCheck(i, j, Vector2.up))
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;        
     }
 }

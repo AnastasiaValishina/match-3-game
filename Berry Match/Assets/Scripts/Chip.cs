@@ -8,31 +8,34 @@ public class Chip : MonoBehaviour
     public int previousRow, previousColumn;
     public int targetX, targetY;
 
-    Board board;
-    MatchFinder matchFinder;
-    public GameObject otherChip;
-
-    Vector2 firstTouchPosition;
-    Vector2 finalTouchPosition;
-    Vector2 tempPosition;
-    public float swipeAngle = 0;
-    public float swipeResist = 1f;
+    [SerializeField] GameObject rowArrowPrefab;
+    [SerializeField] GameObject columnArrowPrefab;
+    [SerializeField] GameObject colorBombPrefab;
+    [SerializeField] GameObject bombPrefab;
 
     public bool isMatched = false;
     public bool isColumnArrow = false;
     public bool isRowArrow = false;
     public bool isColorBomb = false;
     public bool isBomb = false;
+    public GameObject otherChip;
+    public float swipeAngle = 0;
+    public float swipeResist = 1f;
 
-    public GameObject rowArrowPrefab;
-    public GameObject columnArrowPrefab;
-    public GameObject colorBombPrefab;
-    public GameObject bombPrefab;
+    Board board;
+    MatchFinder matchFinder;
+    HintManager hintManager;
+
+    Vector2 firstTouchPosition;
+    Vector2 finalTouchPosition;
+    Vector2 tempPosition;
+
 
     private void Start()
     {
         board = FindObjectOfType<Board>();
         matchFinder = FindObjectOfType<MatchFinder>();
+        hintManager = FindObjectOfType<HintManager>();
     }
 
     private void OnMouseOver()
@@ -127,6 +130,11 @@ public class Chip : MonoBehaviour
     }
     private void OnMouseDown()
     {
+        if (hintManager != null)
+        {
+            hintManager.DestroyHint();
+        }
+
         if (board.currentState == GameState.move)
         {
             firstTouchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);

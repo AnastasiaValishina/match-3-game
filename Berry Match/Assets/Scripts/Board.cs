@@ -442,7 +442,7 @@ public class Board : MonoBehaviour
         return false;
     }
 
-    bool SwitchAndCheck(int column, int row, Vector2 direction)
+    public bool SwitchAndCheck(int column, int row, Vector2 direction)
     {
         SwitchChips(column, row, direction);
         if (CheckForMatches())

@@ -228,6 +228,7 @@ public class Chip : MonoBehaviour
         isColorBomb = true;
         GameObject rainbowBomb = Instantiate(colorBombPrefab, transform.position, Quaternion.identity);
         rainbowBomb.transform.parent = transform;
+        gameObject.tag = "RainbowBomb";
     }
 
     public void MakeAdjacentBomb()

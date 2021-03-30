@@ -38,6 +38,8 @@ public class Board : MonoBehaviour
     public Chip currentChip;
     public TileType[] boardLayout;
     public int baseChipValue = 5;
+    public float refillDelay = 0.5f;
+
     int streakValue = 1;
     bool[,] blankSpaces;
     MatchFinder matchFinder;
@@ -319,7 +321,7 @@ public class Board : MonoBehaviour
                 }
             }
         }
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(refillDelay * 0.5f);
         StartCoroutine(FillBoard());
     }
     IEnumerator DecreaseRow()
@@ -355,6 +357,13 @@ public class Board : MonoBehaviour
                 {
                     Vector2 tempPosition = new Vector2(i, j + offset);
                     int randomChip = Random.Range(0, chips.Length);
+                    int maxIterations = 0;
+                    while (MatchesAt(i, j, chips[randomChip]) && maxIterations < 100)
+                    {
+                        maxIterations++;
+                        randomChip = Random.Range(0, chips.Length);
+                    }
+                    maxIterations = 0;
                     GameObject chip = Instantiate(chips[randomChip], tempPosition, Quaternion.identity);
                     allChips[i, j] = chip;
                     chip.GetComponent<Chip>().row = j;
@@ -385,18 +394,18 @@ public class Board : MonoBehaviour
     IEnumerator FillBoard()
     {
         RefillBoard();
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(refillDelay);
 
         while (MatchesOnBoard())
         {
             streakValue++;
-            yield return new WaitForSeconds(0.5f);
             DestroyMatches();
+            yield return new WaitForSeconds(2 * refillDelay);
         }
 
         matchFinder.currentMatches.Clear();
         currentChip = null;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(refillDelay);
 
         if (IsDeadLocked())
         {

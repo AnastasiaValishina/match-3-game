@@ -181,8 +181,11 @@ public class MatchFinder : MonoBehaviour
             {
                 if (i >= 0 && i < board.width && j >= 0 && j < board.height)
                 {
-                    chips.Add(board.allChips[i, j]);
-                    board.allChips[i, j].GetComponent<Chip>().isMatched = true;
+                    if (board.allChips[i, j] != null)
+                    {
+                        chips.Add(board.allChips[i, j]);
+                        board.allChips[i, j].GetComponent<Chip>().isMatched = true;
+                    }
                 }
             }
         }
@@ -196,8 +199,13 @@ public class MatchFinder : MonoBehaviour
         {
             if (board.allChips[column, i] != null)
             {
+                Chip chip = board.allChips[column, i].GetComponent<Chip>();
+                if (chip.isRowArrow)
+                {
+                    chips.Union(GetRowChips(i)).ToList();
+                }
                 chips.Add(board.allChips[column, i]);
-                board.allChips[column, i].GetComponent<Chip>().isMatched = true; ;
+                chip.isMatched = true; ;
             }
         }
         return chips;
@@ -210,8 +218,13 @@ public class MatchFinder : MonoBehaviour
         {
             if (board.allChips[i, row] != null)
             {
+                Chip chip = board.allChips[i, row].GetComponent<Chip>();
+                if (chip.isColumnArrow)
+                {
+                    chips.Union(GetColumnChips(i)).ToList();
+                }
                 chips.Add(board.allChips[i, row]);
-                board.allChips[i, row].GetComponent<Chip>().isMatched = true; ;
+                chip.isMatched = true; ;
             }
         }
         return chips;

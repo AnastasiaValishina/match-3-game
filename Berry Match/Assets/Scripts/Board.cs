@@ -39,6 +39,7 @@ public class Board : MonoBehaviour
     public TileType[] boardLayout;
     public int baseChipValue = 5;
     public float refillDelay = 0.5f;
+    public int[] scoreGoals;
 
     int streakValue = 1;
     bool[,] blankSpaces;

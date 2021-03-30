@@ -9,6 +9,7 @@ TagManager:
   - ChipOrange
   - ChipRed
   - ChipYellow
+  - RainbowBomb
   layers:
   - Default
   - TransparentFX

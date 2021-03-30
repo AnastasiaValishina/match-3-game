@@ -37,10 +37,12 @@ public class Board : MonoBehaviour
     public GameObject destroyEffect;
     public Chip currentChip;
     public TileType[] boardLayout;
-
+    public int baseChipValue = 5;
+    int streakValue = 1;
     bool[,] blankSpaces;
     MatchFinder matchFinder;
     BreakableTile[,] breakableTiles;
+    ScoreManager scoreManager;
 
     void Start()
     {
@@ -48,6 +50,7 @@ public class Board : MonoBehaviour
         blankSpaces = new bool[width, height];
         breakableTiles = new BreakableTile[width, height];
         matchFinder = FindObjectOfType<MatchFinder>();
+        scoreManager = FindObjectOfType<ScoreManager>();
         SetUp();
     }
 
@@ -275,6 +278,7 @@ public class Board : MonoBehaviour
             GameObject particle = Instantiate(destroyEffect, allChips[column, row].transform.position, Quaternion.identity);
             Destroy(particle, 1f);
             Destroy(allChips[column, row]);
+            scoreManager.IncreaseScore(baseChipValue * streakValue);
             allChips[column, row] = null;
         }
     }
@@ -385,6 +389,7 @@ public class Board : MonoBehaviour
 
         while (MatchesOnBoard())
         {
+            streakValue++;
             yield return new WaitForSeconds(0.5f);
             DestroyMatches();
         }
@@ -399,6 +404,7 @@ public class Board : MonoBehaviour
         }
 
         currentState = GameState.move;
+        streakValue = 1;
     }
 
     void SwitchChips(int column, int row, Vector2 direction)

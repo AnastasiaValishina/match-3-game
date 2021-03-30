@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class CameraScaler : MonoBehaviour
 {
-    public float cameraOffset = -10;
-    public float aspectRatio = 0.5625f;
-    public float padding = 2f;
+    [SerializeField] float cameraOffset = -10;
+    [SerializeField] float aspectRatio = 0.5625f;
+    [SerializeField] float padding = 2f;
+    [SerializeField] float yOffset = 1f;
 
     Board board;
 
@@ -24,7 +25,7 @@ public class CameraScaler : MonoBehaviour
     {
         width--;
         height--;
-        Vector3 tempPosition = new Vector3(width / 2, height / 2, cameraOffset);
+        Vector3 tempPosition = new Vector3(width / 2, height / 2 + yOffset, cameraOffset);
         transform.position = tempPosition;
     }
 

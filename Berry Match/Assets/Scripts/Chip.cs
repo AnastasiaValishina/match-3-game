@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class Chip : MonoBehaviour
 {
-    [Header("BoardVariables")]
     public int column, row;
     public int previousRow, previousColumn;
     public int targetX, targetY;

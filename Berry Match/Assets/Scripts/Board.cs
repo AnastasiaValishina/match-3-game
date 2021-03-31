@@ -46,6 +46,7 @@ public class Board : MonoBehaviour
     MatchFinder matchFinder;
     BreakableTile[,] breakableTiles;
     ScoreManager scoreManager;
+    SoundManager soundManager;
 
     void Start()
     {
@@ -54,6 +55,7 @@ public class Board : MonoBehaviour
         breakableTiles = new BreakableTile[width, height];
         matchFinder = FindObjectOfType<MatchFinder>();
         scoreManager = FindObjectOfType<ScoreManager>();
+        soundManager = FindObjectOfType<SoundManager>();
         SetUp();
     }
 
@@ -276,6 +278,11 @@ public class Board : MonoBehaviour
                 {
                     breakableTiles[column, row] = null;
                 }
+            }
+
+            if (soundManager != null)
+            {
+                soundManager.PlayRandomDestroyNoise();
             }
 
             GameObject particle = Instantiate(destroyEffect, allChips[column, row].transform.position, Quaternion.identity);

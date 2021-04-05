@@ -47,6 +47,7 @@ public class Board : MonoBehaviour
     BreakableTile[,] breakableTiles;
     ScoreManager scoreManager;
     SoundManager soundManager;
+    GoalManager goalManager;
 
     void Start()
     {
@@ -56,6 +57,7 @@ public class Board : MonoBehaviour
         matchFinder = FindObjectOfType<MatchFinder>();
         scoreManager = FindObjectOfType<ScoreManager>();
         soundManager = FindObjectOfType<SoundManager>();
+        goalManager = FindObjectOfType<GoalManager>();
         SetUp();
     }
 
@@ -278,6 +280,13 @@ public class Board : MonoBehaviour
                 {
                     breakableTiles[column, row] = null;
                 }
+            }
+
+            if (goalManager != null)
+            {
+                goalManager.CompareGoal(allChips[column, row].tag.ToString());
+                goalManager.UpdateGoals();
+                
             }
 
             if (soundManager != null)

@@ -6,16 +6,23 @@ public class BreakableTile : MonoBehaviour
 {
     public int hitPoints;
     SpriteRenderer spriteRenderer;
+    GoalManager goalManager;
 
     private void Start()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();        
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        goalManager = FindObjectOfType<GoalManager>();
     }
 
     private void Update() 
     {
         if (hitPoints <= 0)
         {
+            if (goalManager != null)
+            {
+                goalManager.CompareGoal(gameObject.tag);
+                goalManager.UpdateGoals();
+            }
             Destroy(gameObject);
         }
     }

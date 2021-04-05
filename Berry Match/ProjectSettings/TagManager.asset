@@ -10,6 +10,8 @@ TagManager:
   - ChipRed
   - ChipYellow
   - RainbowBomb
+  - Breackable
+  - IceWhole
   layers:
   - Default
   - TransparentFX

@@ -7,7 +7,7 @@ public class GoalPanel : MonoBehaviour
 {
     [SerializeField] Image icon;
     public Sprite chipSprite;
-    [SerializeField] Text text;
+    public Text chipText;
     public string chipTag;
 
     void Start()
@@ -23,6 +23,6 @@ public class GoalPanel : MonoBehaviour
     void Setup()
     {
         icon.sprite = chipSprite;
-        text.text = chipTag;
+        chipText.text = chipTag;
     }
 }

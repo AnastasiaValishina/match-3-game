@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 390154528183715409}
   m_Layer: 0
   m_Name: IceWhole
-  m_TagString: Untagged
+  m_TagString: IceWhole
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

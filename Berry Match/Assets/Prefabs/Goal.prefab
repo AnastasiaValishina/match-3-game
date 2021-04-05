@@ -264,5 +264,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 6914976338018011712}
   chipSprite: {fileID: 0}
-  text: {fileID: 2656394897664266823}
+  chipText: {fileID: 2656394897664266823}
   chipTag: 

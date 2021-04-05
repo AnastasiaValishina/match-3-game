@@ -7,7 +7,7 @@ using UnityEngine;
 public class BlankGoal
 {
     public int numberNeeded;
-    [SerializeField] int numberCollected;
+    public int numberCollected;
     public Sprite goalSprite;
     public string matchValue;
 }
@@ -15,6 +15,7 @@ public class BlankGoal
 public class GoalManager : MonoBehaviour
 {
     [SerializeField] BlankGoal[] levelGoals;
+    public List<GoalPanel> currentGoals = new List<GoalPanel>();
     [SerializeField] GameObject goalPrefab;
     [SerializeField] GameObject goalMenuParent;
     [SerializeField] GameObject goalHudParent;
@@ -22,12 +23,6 @@ public class GoalManager : MonoBehaviour
     void Start()
     {
         SetGoalsInMenu();  
-    }
-
-
-    void Update()
-    {
-        
     }
 
     void SetGoalsInMenu()
@@ -43,8 +38,38 @@ public class GoalManager : MonoBehaviour
             GameObject gameGoal = Instantiate(goalPrefab, goalHudParent.transform.position, Quaternion.identity);
             gameGoal.transform.SetParent(goalHudParent.transform, false);
             panel = gameGoal.GetComponent<GoalPanel>();
+            currentGoals.Add(panel);
             panel.chipSprite = levelGoals[i].goalSprite;
             panel.chipTag = "0/" + levelGoals[i].numberNeeded;
+        }
+    }
+
+    public void UpdateGoals()
+    {
+        int goalsCompleted = 0;
+        for (int i = 0; i < levelGoals.Length; i++)
+        {
+            currentGoals[i].chipText.text = "" + levelGoals[i].numberCollected + "/" + levelGoals[i].numberNeeded;
+            if (levelGoals[i].numberCollected >= levelGoals[i].numberNeeded)
+            {
+                goalsCompleted++;
+                currentGoals[i].chipText.text = "" + levelGoals[i].numberCollected + "/" + levelGoals[i].numberNeeded;
+            }
+        }
+        if (goalsCompleted >= levelGoals.Length)
+        {
+            Debug.Log("win");
+        }
+    }
+
+    public void CompareGoal(string goalToCompare)
+    {
+        for (int i = 0; i < levelGoals.Length; i++)
+        {
+            if (goalToCompare == levelGoals[i].matchValue)
+            {
+                levelGoals[i].numberCollected++;
+            }
         }
     }
 }

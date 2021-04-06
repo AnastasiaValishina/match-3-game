@@ -28,6 +28,9 @@ public class TileType
 
 public class Board : MonoBehaviour
 {
+    public World world;
+    public int level;
+
     public GameState currentState = GameState.move;
     public int width = 8;
     public int height = 8;
@@ -51,6 +54,23 @@ public class Board : MonoBehaviour
     SoundManager soundManager;
     GoalManager goalManager;
 
+    private void Awake()
+    {
+        if (world != null)
+        {
+            if (level < world.levels.Length)
+            {
+                if (world.levels[level] != null)
+                {
+                    width = world.levels[level].width;
+                    height = world.levels[level].height;
+                    chips = world.levels[level].chips;
+                    scoreGoals = world.levels[level].scoreGoals;
+                    boardLayout = world.levels[level].boardLayout;
+                }
+            }
+        }
+    }
     void Start()
     {
         allChips = new GameObject[width, height];

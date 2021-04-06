@@ -19,12 +19,29 @@ public class GoalManager : MonoBehaviour
     [SerializeField] GameObject goalPrefab;
     [SerializeField] GameObject goalMenuParent;
     [SerializeField] GameObject goalHudParent;
+
     EndGameManager endGameManager;
+    Board board;
 
     void Start()
     {
         endGameManager = FindObjectOfType<EndGameManager>();
+        board = FindObjectOfType<Board>();
+        GetGoals();
         SetGoalsInMenu();  
+    }
+
+    void GetGoals()
+    {
+        if (board.level < board.world.levels.Length)
+        {
+            if (board != null &&
+                board.world != null &&
+                board.world.levels[board.level] != null)
+            {
+                levelGoals = board.world.levels[board.level].levelGoals;
+            }
+        }
     }
 
     void SetGoalsInMenu()

@@ -5,7 +5,10 @@ using UnityEngine;
 public enum GameState
 {
     wait,
-    move
+    move,
+    win,
+    lose,
+    pause
 }
 
 public enum TileKind
@@ -13,7 +16,6 @@ public enum TileKind
     Breakable,
     Blank,
     Normal
-
 }
 
 [System.Serializable]
@@ -59,6 +61,7 @@ public class Board : MonoBehaviour
         soundManager = FindObjectOfType<SoundManager>();
         goalManager = FindObjectOfType<GoalManager>();
         SetUp();
+        currentState = GameState.pause;
     }
 
     public void GenerateBlanckSpaces()

@@ -19,9 +19,11 @@ public class GoalManager : MonoBehaviour
     [SerializeField] GameObject goalPrefab;
     [SerializeField] GameObject goalMenuParent;
     [SerializeField] GameObject goalHudParent;
+    EndGameManager endGameManager;
 
     void Start()
     {
+        endGameManager = FindObjectOfType<EndGameManager>();
         SetGoalsInMenu();  
     }
 
@@ -58,6 +60,10 @@ public class GoalManager : MonoBehaviour
         }
         if (goalsCompleted >= levelGoals.Length)
         {
+            if(endGameManager != null)
+            {
+                endGameManager.WinGame();
+            }
             Debug.Log("win");
         }
     }

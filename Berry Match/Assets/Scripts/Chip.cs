@@ -24,6 +24,7 @@ public class Chip : MonoBehaviour
     Board board;
     MatchFinder matchFinder;
     HintManager hintManager;
+    EndGameManager endGameManager;
 
     Vector2 firstTouchPosition;
     Vector2 finalTouchPosition;
@@ -35,6 +36,7 @@ public class Chip : MonoBehaviour
         board = FindObjectOfType<Board>();
         matchFinder = FindObjectOfType<MatchFinder>();
         hintManager = FindObjectOfType<HintManager>();
+        endGameManager = FindObjectOfType<EndGameManager>();
     }
 
     private void OnMouseOver()
@@ -122,6 +124,13 @@ public class Chip : MonoBehaviour
             }
             else
             {
+                if (endGameManager != null)
+                {
+                    if (endGameManager.requirements.gameType == GameType.Moves)
+                    {
+                        endGameManager.DecreaseCounterValue();
+                    }
+                }
                 board.DestroyMatches();
             }
             //otherChip = null;

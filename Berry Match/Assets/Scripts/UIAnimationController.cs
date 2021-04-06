@@ -17,5 +17,18 @@ public class UIAnimationController : MonoBehaviour
     {
         goalsPopup.DOAnchorPosY(1600f, 1.5f);
         fadePanel.DOFade(0f, 1.5f);
+        StartCoroutine(GameStart());
     } 
+
+    public void GameOverAnim()
+    {
+        fadePanel.DOFade(1f, 1.5f);
+    }
+
+    IEnumerator GameStart()
+    {
+        yield return new WaitForSeconds(1.5f);
+        Board board = FindObjectOfType<Board>();
+        board.currentState = GameState.move;
+    }
 }

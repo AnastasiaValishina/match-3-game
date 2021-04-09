@@ -633,8 +633,9 @@ GameObject:
   m_Component:
   - component: {fileID: 294082973}
   - component: {fileID: 294082972}
+  - component: {fileID: 294082974}
   m_Layer: 0
-  m_Name: UIAnimationController
+  m_Name: UIController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -668,6 +669,18 @@ Transform:
   m_Father: {fileID: 349042625}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &294082974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 294082971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a0d2974369b2f64781152ca97eac128, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &294777487
 GameObject:
   m_ObjectHideFlags: 0
@@ -1759,7 +1772,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 785079366}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 294082974}
+        m_MethodName: OnOkClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &785079366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3034,7 +3058,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1807276796}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 294082974}
+        m_MethodName: OnOkClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1807276796
 MonoBehaviour:
   m_ObjectHideFlags: 0

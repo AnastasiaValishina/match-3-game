@@ -1774,7 +1774,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 294082974}
-        m_MethodName: OnOkClick
+        m_MethodName: OnOkClickLose
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3060,7 +3060,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 294082974}
-        m_MethodName: OnOkClick
+        m_MethodName: OnOkClickWin
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

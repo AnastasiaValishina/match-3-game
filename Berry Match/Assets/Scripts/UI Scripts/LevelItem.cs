@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,14 +16,36 @@ public class LevelItem : MonoBehaviour
 
  //   Image buttonImage;
     Button itemButton;
+    GameData gameData;
+    int starsActive;
 
     void Start()
     {
-    //    buttonImage = GetComponent<Image>();
+        //    buttonImage = GetComponent<Image>();
+        gameData = FindObjectOfType<GameData>();
         itemButton = GetComponent<Button>();
+        LoadData();
         ActivateStars();
         ShowLevel();
         SetSprite();
+    }
+
+    private void LoadData()
+    {
+        if (gameData != null)
+        {
+            if (gameData.saveData.isActive[level - 1])
+            {
+                isActive = true;
+            }
+            else
+            {
+                isActive = false;
+            }
+
+            starsActive = gameData.saveData.stars[level - 1];
+            Debug.Log(starsActive);
+        }
     }
 
     void SetSprite()
@@ -52,9 +75,10 @@ public class LevelItem : MonoBehaviour
 
     void ActivateStars()
     {
-        for (int i = 0; i < stars.Length; i++)
+        for (int i = 0; i < starsActive; i++)
         {
-            stars[i].enabled = false;
+            stars[i].enabled = true;
+            Debug.Log(i + " activated");
         }
     }
 }

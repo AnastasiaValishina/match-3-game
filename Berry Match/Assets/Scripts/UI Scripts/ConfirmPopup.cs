@@ -3,19 +3,41 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
 
 public class ConfirmPopup : MonoBehaviour
 {
     public Image[] stars;
     public int level;
-    void Start()
+    [SerializeField] Text highScoreText;
+    [SerializeField] Text starCounterText;
+    
+
+    GameData gameData;
+    int starsActive;
+    int highScore;
+
+    void OnEnable()
     {
+        gameData = FindObjectOfType<GameData>();
+        LoadData();
         ActivateStars();
+        UpdateText();
     }
 
-    void Update()
+    private void LoadData()
     {
-        
+        if (gameData != null)
+        {
+            starsActive = gameData.saveData.stars[level - 1];
+            highScore = gameData.saveData.highScores[level - 1];
+        }
+    }
+
+    void UpdateText()
+    {
+        highScoreText.text = "" + highScore;
+        starCounterText.text = "" + starsActive + "/3";
     }
 
     public void OnCloseClick()
@@ -31,9 +53,9 @@ public class ConfirmPopup : MonoBehaviour
 
     void ActivateStars()
     {
-        for (int i = 0; i < stars.Length; i++)
+        for (int i = 0; i < starsActive; i++)
         {
-            stars[i].enabled = false;
+            stars[i].enabled = true;
         }
     }
 }

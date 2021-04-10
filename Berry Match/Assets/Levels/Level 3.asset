@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c632b786675ab9f49a1aa1014812823a, type: 3}
   m_Name: Level 3
   m_EditorClassIdentifier: 
-  width: 5
+  width: 4
   height: 5
   boardLayout:
   - x: 1

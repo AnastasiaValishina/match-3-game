@@ -9,11 +9,13 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] Image scoreBar;
     public int score;
     Board board;
+    GameData gameData;
 
     void Start()
     {
-        scoreText.text = score.ToString();
         board = FindObjectOfType<Board>();
+        gameData = FindObjectOfType<GameData>();
+        scoreText.text = score.ToString();
     }
 
     void Update()
@@ -24,6 +26,17 @@ public class ScoreManager : MonoBehaviour
     public void IncreaseScore(int amount)
     {
         score += amount;
+
+        if (gameData != null)
+        {
+            int highScore = gameData.saveData.highScores[board.level];
+            if (score > highScore)
+            {
+                gameData.saveData.highScores[board.level] = score;
+            }
+            gameData.Save();
+        }
+
         scoreText.text = score.ToString();
         
         if (board != null && scoreBar != null)

@@ -196,9 +196,53 @@ public class Board : MonoBehaviour
         return false;
     }
 
-    private bool ColumnOrRow()
+    private int ColumnOrRow()
     {
-        int numberHorizontal = 0;
+        List<GameObject> matchCopy = matchFinder.currentMatches as List<GameObject>; // copy of current matches
+
+        for (int i = 0; i < matchCopy.Count; i++)
+        {
+            Chip thisChip = matchCopy[i].GetComponent<Chip>();
+            int column = thisChip.column;
+            int row = thisChip.row;
+            int columnMatch = 0;
+            int rowMatch = 0;
+
+            for (int j = 0; j < matchCopy.Count; j++)
+            {
+                Chip nextChip = matchCopy[j].GetComponent<Chip>();
+                if (nextChip == thisChip)
+                {
+                    continue;
+                }
+                if (nextChip.column == thisChip.column && nextChip.CompareTag(thisChip.tag))
+                {
+                    columnMatch++;
+                }
+                if (nextChip.row == thisChip.row && nextChip.CompareTag(thisChip.tag))
+                {
+                    rowMatch++;
+                }
+            }
+            // return 3 if column or row arrow
+            // return 2 if bomd
+            // return 1 if color bomb
+            if (columnMatch == 4 || rowMatch == 4)
+            {
+                return 1;
+            }
+            if (columnMatch == 2 && rowMatch == 2)
+            {
+                return 2;
+            }
+            if (columnMatch == 3 || rowMatch == 3)
+            {
+                return 3;
+            }
+        }
+
+        return 0;
+     /*   int numberHorizontal = 0;
         int numberVertical = 0;
         Chip firstChip = matchFinder.currentMatches[0].GetComponent<Chip>();
 
@@ -217,12 +261,12 @@ public class Board : MonoBehaviour
                 }
             }
         }
-        return numberVertical == 5 || numberHorizontal == 5;
+        return numberVertical == 5 || numberHorizontal == 5;*/
     }
 
     private void CheckToMakeBombs()
     {
-        if (matchFinder.currentMatches.Count == 4 || matchFinder.currentMatches.Count == 7)
+        /*if (matchFinder.currentMatches.Count == 4 || matchFinder.currentMatches.Count == 7)
         {
             matchFinder.CheckForBoosters();
         }
@@ -288,6 +332,74 @@ public class Board : MonoBehaviour
                         }
                     }
                 }
+            }
+        }*/
+        if (matchFinder.currentMatches.Count > 3)
+        {
+            int typeOfmatch = ColumnOrRow();
+            if (typeOfmatch == 1)
+            {
+                // make rainbow bomb
+                if (currentChip != null)
+                {
+                    if (currentChip.isMatched)
+                    {
+                        if (!currentChip.isColorBomb)
+                        {
+                            currentChip.isMatched = false;
+                            currentChip.MakeColorBomb();
+                        }
+                    }
+                    else
+                    {
+                        if (currentChip.otherChip != null)
+                        {
+                            Chip otherChip = currentChip.otherChip.GetComponent<Chip>();
+                            if (otherChip.isMatched)
+                            {
+                                if (!otherChip.isColorBomb)
+                                {
+                                    otherChip.isMatched = false;
+                                    otherChip.MakeColorBomb();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if(typeOfmatch == 2)
+            {
+                // make a bomb
+                if (currentChip != null)
+                {
+                    if (currentChip.isMatched)
+                    {
+                        if (!currentChip.isBomb)
+                        {
+                            currentChip.isMatched = false;
+                            currentChip.MakeAdjacentBomb();
+                        }
+                    }
+                    else
+                    {
+                        if (currentChip.otherChip != null)
+                        {
+                            Chip otherChip = currentChip.otherChip.GetComponent<Chip>();
+                            if (otherChip.isMatched)
+                            {
+                                if (!otherChip.isBomb)
+                                {
+                                    otherChip.isMatched = false;
+                                    otherChip.MakeAdjacentBomb();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (typeOfmatch == 3)
+            {
+                matchFinder.CheckForBoosters();
             }
         }
     }
@@ -438,8 +550,8 @@ public class Board : MonoBehaviour
 
     IEnumerator FillBoard()
     {
-        RefillBoard();
         yield return new WaitForSeconds(refillDelay);
+        RefillBoard();
 
         while (MatchesOnBoard())
         {

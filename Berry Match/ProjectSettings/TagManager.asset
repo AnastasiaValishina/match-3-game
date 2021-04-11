@@ -12,6 +12,7 @@ TagManager:
   - RainbowBomb
   - Breackable
   - IceWhole
+  - Board
   layers:
   - Default
   - TransparentFX

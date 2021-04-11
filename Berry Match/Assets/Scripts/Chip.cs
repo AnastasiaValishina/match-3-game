@@ -220,30 +220,43 @@ public class Chip : MonoBehaviour
 
     public void MakeRowBomb()
     {
-        isRowArrow = true;
-        GameObject arrow = Instantiate(rowArrowPrefab, transform.position, Quaternion.identity);
-        arrow.transform.parent = transform;
+        if (!isColumnArrow && !isColorBomb && !isBomb)
+        {
+            isRowArrow = true;
+            GameObject arrow = Instantiate(rowArrowPrefab, transform.position, Quaternion.identity);
+            arrow.transform.parent = transform;
+        }
     }
     
     public void MakeColumnBomb()
     {
-        isColumnArrow = true;
-        GameObject arrow = Instantiate(columnArrowPrefab, transform.position, Quaternion.identity);
-        arrow.transform.parent = transform;
+        if (!isRowArrow && !isColorBomb && !isBomb)
+        {
+            isColumnArrow = true;
+            GameObject arrow = Instantiate(columnArrowPrefab, transform.position, Quaternion.identity);
+            arrow.transform.parent = transform;
+        }
     }
 
     public void MakeColorBomb()
     {
-        isColorBomb = true;
-        GameObject rainbowBomb = Instantiate(colorBombPrefab, transform.position, Quaternion.identity);
-        rainbowBomb.transform.parent = transform;
-        gameObject.tag = "RainbowBomb";
+        if (!isRowArrow &&!isColumnArrow && !isBomb)
+        {
+            isColorBomb = true;
+            GameObject rainbowBomb = Instantiate(colorBombPrefab, transform.position, Quaternion.identity);
+            rainbowBomb.transform.parent = transform;
+            gameObject.tag = "RainbowBomb";
+        }
+
     }
 
     public void MakeAdjacentBomb()
     {
-        isBomb = true;
-        GameObject bomb = Instantiate(bombPrefab, transform.position, Quaternion.identity);
-        bomb.transform.parent = transform;
+        if (!isRowArrow && !isColumnArrow && !isColorBomb)
+        {
+            isBomb = true;
+            GameObject bomb = Instantiate(bombPrefab, transform.position, Quaternion.identity);
+            bomb.transform.parent = transform;
+        }
     }
 }

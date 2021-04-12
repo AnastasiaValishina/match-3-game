@@ -436,6 +436,7 @@ public class Board : MonoBehaviour
 
             GameObject particle = Instantiate(destroyEffect, allChips[column, row].transform.position, Quaternion.identity);
             Destroy(particle, 1f);
+            // Play animation from chip script
             Destroy(allChips[column, row]);
             scoreManager.IncreaseScore(baseChipValue * streakValue);
             allChips[column, row] = null;

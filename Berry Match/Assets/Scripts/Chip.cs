@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using DG.Tweening;
 
 public class Chip : MonoBehaviour
 {
@@ -37,6 +38,7 @@ public class Chip : MonoBehaviour
         matchFinder = FindObjectOfType<MatchFinder>();
         hintManager = FindObjectOfType<HintManager>();
         endGameManager = FindObjectOfType<EndGameManager>();
+        AnimationLanding();
     }
 
     private void OnMouseOver()
@@ -142,6 +144,8 @@ public class Chip : MonoBehaviour
         {
             hintManager.DestroyHint();
         }
+
+        AnimationTouch();
 
         if (board.currentState == GameState.move)
         {
@@ -258,5 +262,23 @@ public class Chip : MonoBehaviour
             GameObject bomb = Instantiate(bombPrefab, transform.position, Quaternion.identity);
             bomb.transform.parent = transform;
         }
+    }
+
+    void AnimationTouch()
+    {
+        Sequence mySequence = DOTween.Sequence();
+        mySequence.Append(transform.DOScaleX(0.8f, 0.3f));
+        mySequence.Append(transform.DOScaleX(1f, 0.3f));
+        mySequence.Join(transform.DOScaleY(0.8f, 0.3f));
+        mySequence.Append(transform.DOScaleY(1f, 0.3f));
+    }
+
+    void AnimationLanding()
+    {
+        Sequence mySequence = DOTween.Sequence();
+        mySequence.AppendInterval(0.2f);
+        mySequence.Append(transform.DOScaleY(0.7f, 0.2f));
+        mySequence.Append(transform.DOScaleY(1.1f, 0.2f));
+        mySequence.Append(transform.DOScaleY(1f, 0.2f));
     }
 }

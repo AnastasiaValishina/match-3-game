@@ -27,10 +27,9 @@ public class Chip : MonoBehaviour
     HintManager hintManager;
     EndGameManager endGameManager;
 
-    Vector2 firstTouchPosition;
-    Vector2 finalTouchPosition;
+    Vector2 firstTouchPosition = Vector2.zero;
+    Vector2 finalTouchPosition = Vector2.zero;
     Vector2 tempPosition;
-
 
     private void Start()
     {
@@ -53,12 +52,6 @@ public class Chip : MonoBehaviour
 
     private void Update()
     {
-       // FindMatches();
-      //  if (isMatched)
-       // {
-       //     GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 100f);
-      //  }
-
         targetX = column;
         targetY = row;
         if (Mathf.Abs(targetX - transform.position.x) > 0.1)
@@ -69,6 +62,7 @@ public class Chip : MonoBehaviour
             if (board.allChips[column, row] != gameObject)
             {
                 board.allChips[column, row] = gameObject;
+            //    matchFinder.FindAllMatches();
             }
             matchFinder.FindAllMatches();
         }
@@ -87,6 +81,7 @@ public class Chip : MonoBehaviour
             if (board.allChips[column, row] != gameObject)
             {
                 board.allChips[column, row] = gameObject;
+           //     matchFinder.FindAllMatches();
             }
             matchFinder.FindAllMatches();
         }
@@ -212,7 +207,7 @@ public class Chip : MonoBehaviour
         {
             MoveChips(Vector2.left);
         }
-        else if (swipeAngle < 45 && swipeAngle >= -135 && row > 0)
+        else if (swipeAngle < -45 && swipeAngle >= -135 && row > 0)
         {
             MoveChips(Vector2.down);
         }
@@ -251,7 +246,6 @@ public class Chip : MonoBehaviour
             rainbowBomb.transform.parent = transform;
             gameObject.tag = "RainbowBomb";
         }
-
     }
 
     public void MakeAdjacentBomb()

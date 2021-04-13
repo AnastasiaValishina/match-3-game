@@ -19,6 +19,13 @@ public enum TileKind
 }
 
 [System.Serializable]
+public class MatchType
+{
+    public int type;
+    public string color;
+}
+
+[System.Serializable]
 public class TileType
 {
     public int x;
@@ -45,6 +52,7 @@ public class Board : MonoBehaviour
     public int baseChipValue = 5;
     public float refillDelay = 0.5f;
     public int[] scoreGoals;
+    public MatchType matchType;
 
     int streakValue = 1;
     bool[,] blankSpaces;
@@ -196,13 +204,18 @@ public class Board : MonoBehaviour
         return false;
     }
 
-    private int ColumnOrRow()
+    private MatchType ColumnOrRow()
     {
         List<GameObject> matchCopy = matchFinder.currentMatches as List<GameObject>; // copy of current matches
+
+        matchType.type = 0;
+        matchType.color = "";
 
         for (int i = 0; i < matchCopy.Count; i++)
         {
             Chip thisChip = matchCopy[i].GetComponent<Chip>();
+            string color = matchCopy[i].tag;
+
             int column = thisChip.column;
             int row = thisChip.row;
             int columnMatch = 0;
@@ -211,195 +224,93 @@ public class Board : MonoBehaviour
             for (int j = 0; j < matchCopy.Count; j++)
             {
                 Chip nextChip = matchCopy[j].GetComponent<Chip>();
+
                 if (nextChip == thisChip)
                 {
                     continue;
                 }
-                if (nextChip.column == thisChip.column && nextChip.CompareTag(thisChip.tag))
+                if (nextChip.column == thisChip.column && nextChip.tag == color)
                 {
                     columnMatch++;
                 }
-                if (nextChip.row == thisChip.row && nextChip.CompareTag(thisChip.tag))
+                if (nextChip.row == thisChip.row && nextChip.tag == color)
                 {
                     rowMatch++;
                 }
             }
-            // return 3 if column or row arrow
-            // return 2 if bomd
-            // return 1 if color bomb
+
             if (columnMatch == 4 || rowMatch == 4)
             {
-                return 1;
+                matchType.type = 1;
+                matchType.color = color;
+                return matchType;
             }
-            if (columnMatch == 2 && rowMatch == 2)
+            else if (columnMatch == 2 && rowMatch == 2)
             {
-                return 2;
+                matchType.type = 2;
+                matchType.color = color;
+                return matchType;
             }
-            if (columnMatch == 3 || rowMatch == 3)
+            else if (columnMatch == 3 || rowMatch == 3)
             {
-                return 3;
+                matchType.type = 3;
+                matchType.color = color;
+                return matchType;
             }
         }
 
-        return 0;
-     /*   int numberHorizontal = 0;
-        int numberVertical = 0;
-        Chip firstChip = matchFinder.currentMatches[0].GetComponent<Chip>();
-
-        if (firstChip != null)
-        {
-            foreach (GameObject currentChip in matchFinder.currentMatches)
-            {
-                Chip chip = currentChip.GetComponent<Chip>();
-                if (chip.row == firstChip.row)
-                {
-                    numberHorizontal++;
-                }
-                if (chip.column == firstChip.column)
-                {
-                    numberVertical++;
-                }
-            }
-        }
-        return numberVertical == 5 || numberHorizontal == 5;*/
+        matchType.type = 0;
+        matchType.color = "";
+        return matchType;        
     }
 
     private void CheckToMakeBombs()
-    {
-        /*if (matchFinder.currentMatches.Count == 4 || matchFinder.currentMatches.Count == 7)
-        {
-            matchFinder.CheckForBoosters();
-        }
-
-        if (matchFinder.currentMatches.Count == 5 || matchFinder.currentMatches.Count == 8)
-        {
-            if (ColumnOrRow())
-            {
-                // make rainbow bomb
-                if (currentChip != null)
-                {
-                    if (currentChip.isMatched)
-                    {
-                        if (!currentChip.isColorBomb)
-                        {
-                            currentChip.isMatched = false;
-                            currentChip.MakeColorBomb();
-                        }
-                    }
-                    else
-                    {
-                        if (currentChip.otherChip != null)
-                        {
-                            Chip otherChip = currentChip.otherChip.GetComponent<Chip>();
-                            if (otherChip.isMatched)
-                            {
-                                if (!otherChip.isColorBomb)
-                                {
-                                    otherChip.isMatched = false;
-                                    otherChip.MakeColorBomb();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                // make a bomb
-                if (currentChip != null)
-                {
-                    if (currentChip.isMatched)
-                    {
-                        if (!currentChip.isBomb)
-                        {
-                            currentChip.isMatched = false;
-                            currentChip.MakeAdjacentBomb();
-                        }
-                    }
-                    else
-                    {
-                        if (currentChip.otherChip != null)
-                        {
-                            Chip otherChip = currentChip.otherChip.GetComponent<Chip>();
-                            if (otherChip.isMatched)
-                            {
-                                if (!otherChip.isBomb)
-                                {
-                                    otherChip.isMatched = false;
-                                    otherChip.MakeAdjacentBomb();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }*/
+    {       
         if (matchFinder.currentMatches.Count > 3)
         {
-            int typeOfmatch = ColumnOrRow();
-            if (typeOfmatch == 1)
+            MatchType typeOfMatch = ColumnOrRow();
+            if (typeOfMatch.type == 1)
             {
                 // make rainbow bomb
-                if (currentChip != null)
+                if (currentChip != null && currentChip.isMatched && currentChip.tag == typeOfMatch.color)
                 {
-                    if (currentChip.isMatched)
-                    {
-                        if (!currentChip.isColorBomb)
-                        {
-                            currentChip.isMatched = false;
-                            currentChip.MakeColorBomb();
-                        }
-                    }
-                    else
-                    {
-                        if (currentChip.otherChip != null)
-                        {
-                            Chip otherChip = currentChip.otherChip.GetComponent<Chip>();
-                            if (otherChip.isMatched)
-                            {
-                                if (!otherChip.isColorBomb)
-                                {
-                                    otherChip.isMatched = false;
-                                    otherChip.MakeColorBomb();
-                                }
-                            }
-                        }
-                    }
+                    currentChip.isMatched = false;
+                    currentChip.MakeColorBomb();
                 }
+                else
+                {
+                    if (currentChip.otherChip != null)
+                    {
+                        Chip otherChip = currentChip.otherChip.GetComponent<Chip>();
+                        if (otherChip.isMatched && otherChip.tag == typeOfMatch.color)
+                        {
+                            otherChip.isMatched = false;
+                            otherChip.MakeColorBomb();
+                        }
+                    }
+                }                
             }
-            else if(typeOfmatch == 2)
+            else if(typeOfMatch.type == 2)
             {
                 // make a bomb
-                if (currentChip != null)
+                if (currentChip != null && currentChip.isMatched && currentChip.tag == typeOfMatch.color)
                 {
-                    if (currentChip.isMatched)
+                    currentChip.isMatched = false;
+                    currentChip.MakeAdjacentBomb();
+                }
+                else if (currentChip.otherChip != null)
+                {
+                    Chip otherChip = currentChip.otherChip.GetComponent<Chip>();
+                    if (otherChip.isMatched && otherChip.tag == typeOfMatch.color)
                     {
-                        if (!currentChip.isBomb)
-                        {
-                            currentChip.isMatched = false;
-                            currentChip.MakeAdjacentBomb();
-                        }
-                    }
-                    else
-                    {
-                        if (currentChip.otherChip != null)
-                        {
-                            Chip otherChip = currentChip.otherChip.GetComponent<Chip>();
-                            if (otherChip.isMatched)
-                            {
-                                if (!otherChip.isBomb)
-                                {
-                                    otherChip.isMatched = false;
-                                    otherChip.MakeAdjacentBomb();
-                                }
-                            }
-                        }
-                    }
+                        otherChip.isMatched = false;
+                        otherChip.MakeAdjacentBomb();                                
+                    }                    
                 }
             }
-            else if (typeOfmatch == 3)
+            else if (typeOfMatch.type == 3)
             {
-                matchFinder.CheckForBoosters();
+                matchFinder.CheckForBoosters(typeOfMatch);
             }
         }
     }
@@ -408,11 +319,6 @@ public class Board : MonoBehaviour
     {
         if (allChips[column, row].GetComponent<Chip>().isMatched)
         {
-            if (matchFinder.currentMatches.Count >= 4)
-            {
-                CheckToMakeBombs();
-            }
-
             if (breakableTiles[column, row] != null)
             {
                 breakableTiles[column, row].TakeDamage(1);
@@ -445,6 +351,12 @@ public class Board : MonoBehaviour
 
     public void DestroyMatches()
     {
+        if (matchFinder.currentMatches.Count >= 4)
+        {
+            CheckToMakeBombs();
+        }
+        matchFinder.currentMatches.Clear();
+
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)
@@ -455,7 +367,6 @@ public class Board : MonoBehaviour
                 }
             }
         }
-        matchFinder.currentMatches.Clear();
         StartCoroutine(DecreaseRow2());
     }
 
@@ -533,6 +444,7 @@ public class Board : MonoBehaviour
 
     bool MatchesOnBoard()
     {
+        matchFinder.FindAllMatches();
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)
@@ -541,6 +453,7 @@ public class Board : MonoBehaviour
                 {
                     if (allChips[i, j].GetComponent<Chip>().isMatched)
                     {
+                        Debug.Log("there is a match");
                         return true;
                     }
                 }
@@ -553,23 +466,23 @@ public class Board : MonoBehaviour
     {
         yield return new WaitForSeconds(refillDelay);
         RefillBoard();
-
+        yield return new WaitForSeconds(refillDelay);
         while (MatchesOnBoard())
         {
             streakValue++;
             DestroyMatches();
-            yield return new WaitForSeconds(2 * refillDelay);
+          //  yield return new WaitForSeconds(2 * refillDelay);
+            yield break;
         }
 
-        matchFinder.currentMatches.Clear();
+    //    matchFinder.currentMatches.Clear();
         currentChip = null;
-        yield return new WaitForSeconds(refillDelay);
 
         if (IsDeadLocked())
         {
             ShuffleBoard();
         }
-
+        yield return new WaitForSeconds(refillDelay);
         currentState = GameState.move;
         streakValue = 1;
     }

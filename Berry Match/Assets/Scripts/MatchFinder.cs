@@ -156,6 +156,7 @@ public class MatchFinder : MonoBehaviour
                 }
             }
         }
+        yield return null;
     }
 
     public void MatchChipsOfColor(string color)
@@ -230,11 +231,11 @@ public class MatchFinder : MonoBehaviour
         return chips;
     }
 
-    public void CheckForBoosters()
+    public void CheckForBoosters(MatchType matchType)
     {
         if (board.currentChip != null)
         {
-            if (board.currentChip.isMatched)
+            if (board.currentChip.isMatched && board.currentChip.tag == matchType.color)
             {
                 board.currentChip.isMatched = false;
 
@@ -251,7 +252,7 @@ public class MatchFinder : MonoBehaviour
             else if (board.currentChip.otherChip != null)
             {
                 Chip otherChip = board.currentChip.otherChip.GetComponent<Chip>();
-                if (otherChip.isMatched)
+                if (otherChip.isMatched && otherChip.tag == matchType.color)
                 {
                     otherChip.isMatched = false;
                 }

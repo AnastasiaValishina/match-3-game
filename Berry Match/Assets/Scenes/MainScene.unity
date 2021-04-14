@@ -2128,6 +2128,10 @@ MonoBehaviour:
     type: 3}
   breakableTilePrefab: {fileID: 897611412812562112, guid: 149f4d4a0dda0ad4a93f5a8748774214,
     type: 3}
+  lockTilePrefab: {fileID: 7348551945136532120, guid: 5f73e1663eabfb344b8f632c416078d8,
+    type: 3}
+  concreteTilePrefab: {fileID: 7786154601545865855, guid: 21d5380e66306df4b96ccc4701440e05,
+    type: 3}
   chips:
   - {fileID: 4709689943143386111, guid: 5b91db177c3c6f24d89929c677c93c6d, type: 3}
   - {fileID: 314948106234814126, guid: 03f24a8932c058b4389cf7858eee0640, type: 3}
@@ -2135,8 +2139,6 @@ MonoBehaviour:
   - {fileID: 6865011872285728576, guid: aa699f600d51c9e4a95a4797d5c99b80, type: 3}
   - {fileID: 6722824701471489412, guid: 1cc6c48c5dfd2b341ada5c6030c69606, type: 3}
   destroyEffect: {fileID: 6510921329843599876, guid: 30035353e208e614caf8a529a52f7402,
-    type: 3}
-  lockTilePrefab: {fileID: 7348551945136532120, guid: 5f73e1663eabfb344b8f632c416078d8,
     type: 3}
   currentChip: {fileID: 0}
   boardLayout:

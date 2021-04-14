@@ -13,6 +13,9 @@ TagManager:
   - Breackable
   - IceWhole
   - Board
+  - Concrete
+  - Chocolate
+  - Lock
   layers:
   - Default
   - TransparentFX

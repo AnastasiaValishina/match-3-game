@@ -17,13 +17,22 @@ MonoBehaviour:
   boardLayout:
   - x: 3
     y: 3
-    tileKind: 2
+    tileKind: 3
   - x: 1
     y: 2
-    tileKind: 2
+    tileKind: 3
   - x: 2
     y: 2
-    tileKind: 2
+    tileKind: 3
+  - x: 4
+    y: 4
+    tileKind: 3
+  - x: 3
+    y: 4
+    tileKind: 3
+  - x: 4
+    y: 3
+    tileKind: 3
   chips:
   - {fileID: 314948106234814126, guid: 03f24a8932c058b4389cf7858eee0640, type: 3}
   - {fileID: 3278900296866047159, guid: 83d46809405c63a4b8c8287b15771c50, type: 3}
@@ -35,6 +44,6 @@ MonoBehaviour:
     counterValue: 60
   levelGoals:
   - numberNeeded: 10
-    numberCollected: 0
+    numberCollected: 3
     goalSprite: {fileID: 21300000, guid: 06be2ffff1213ab4c8e0aba3e76b6bb1, type: 3}
     matchValue: ChipGreen

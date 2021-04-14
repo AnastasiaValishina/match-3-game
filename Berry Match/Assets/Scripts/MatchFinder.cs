@@ -47,16 +47,19 @@ public class MatchFinder : MonoBehaviour
         if (chip1.isRowArrow)
         {
             currentMatches.Union(GetRowChips(chip1.row));
+            board.BombRow(chip1.row);
         }
 
         if (chip2.isRowArrow)
         {
             currentMatches.Union(GetRowChips(chip2.row));
+            board.BombRow(chip2.row);
         }
 
         if (chip3.isRowArrow)
         {
             currentMatches.Union(GetRowChips(chip3.row));
+            board.BombRow(chip3.row);
         }
         return currentChips;
     }
@@ -68,16 +71,19 @@ public class MatchFinder : MonoBehaviour
         if (chip1.isColumnArrow)
         {
             currentMatches.Union(GetColumnChips(chip1.column));
+            board.BombColumn(chip1.column);
         }
 
         if (chip2.isColumnArrow)
         {
             currentMatches.Union(GetColumnChips(chip2.column));
+            board.BombColumn(chip2.column);
         }
 
         if (chip3.isColumnArrow)
         {
             currentMatches.Union(GetColumnChips(chip3.column));
+            board.BombColumn(chip2.column);
         }
         return currentChips;
     }

@@ -355,6 +355,42 @@ public class Board : MonoBehaviour
         }
     }
 
+    public void BombRow(int row)
+    {
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                if (concreteTiles[i, j])
+                {
+                    concreteTiles[i, row].TakeDamage(1);
+                    if (concreteTiles[i, row].hitPoints <= 0)
+                    {
+                        concreteTiles[i, row] = null;
+                    }
+                }
+            }
+        }
+    }
+    
+    public void BombColumn(int colunm)
+    {
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                if (concreteTiles[i, j])
+                {
+                    concreteTiles[colunm, j].TakeDamage(1);
+                    if (concreteTiles[colunm, j].hitPoints <= 0)
+                    {
+                        concreteTiles[colunm, j] = null;
+                    }
+                }
+            }
+        }
+    }
+
     void DestroyMatchesAt(int column, int row)
     {
         if (allChips[column, row].GetComponent<Chip>().isMatched)
@@ -564,9 +600,12 @@ public class Board : MonoBehaviour
 
     void SwitchChips(int column, int row, Vector2 direction)
     {
-        GameObject holder = allChips[column + (int)direction.x, row + (int)direction.y] as GameObject;
-        allChips[column + (int)direction.x, row + (int)direction.y] = allChips[column, row];
-        allChips[column, row] = holder;
+        if (allChips[column + (int)direction.x, row + (int)direction.y] != null)
+        {
+            GameObject holder = allChips[column + (int)direction.x, row + (int)direction.y] as GameObject;
+            allChips[column + (int)direction.x, row + (int)direction.y] = allChips[column, row];
+            allChips[column, row] = holder;
+        }
     }
 
     bool CheckForMatches()

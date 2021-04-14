@@ -48,6 +48,7 @@ public class Board : MonoBehaviour
     public GameObject tilePrefab;
     public GameObject breakableTilePrefab;
     public GameObject lockTilePrefab;
+    public GameObject concreteTilePrefab;
     public GameObject[] chips;
     public GameObject[,] allChips;
     public GameObject destroyEffect;
@@ -62,6 +63,7 @@ public class Board : MonoBehaviour
     bool[,] blankSpaces;
     MatchFinder matchFinder;
     BreakableTile[,] breakableTiles;
+    BreakableTile[,] concreteTiles;
     public BreakableTile[,] lockTiles;
     ScoreManager scoreManager;
     SoundManager soundManager;
@@ -94,6 +96,7 @@ public class Board : MonoBehaviour
         allChips = new GameObject[width, height];
         blankSpaces = new bool[width, height];
         breakableTiles = new BreakableTile[width, height];
+        concreteTiles = new BreakableTile[width, height];        
         lockTiles = new BreakableTile[width, height];
         matchFinder = FindObjectOfType<MatchFinder>();
         scoreManager = FindObjectOfType<ScoreManager>();
@@ -140,11 +143,25 @@ public class Board : MonoBehaviour
         }
     }
 
+    void GenerateConcreteTiles()
+    {
+        for (int i = 0; i < boardLayout.Length; i++)
+        {
+            if (boardLayout[i].tileKind == TileKind.Concrete)
+            {
+                Vector2 tempPosition = new Vector2(boardLayout[i].x, boardLayout[i].y);
+                GameObject tile = Instantiate(concreteTilePrefab, tempPosition, Quaternion.identity);
+                concreteTiles[boardLayout[i].x, boardLayout[i].y] = tile.GetComponent<BreakableTile>();
+            }
+        }
+    }
+
     void SetUp()
     {
         GenerateBlanckSpaces();
         GenerateBreakableTiles();
         GenerateLockTiles();
+        GenerateConcreteTiles();
 
         for (int i = 0; i < width; i++)
         {
@@ -157,22 +174,25 @@ public class Board : MonoBehaviour
                     backgroundTile.transform.parent = transform;
                     backgroundTile.name = "( " + i + ", " + j + " )";
 
-                    Vector2 chipPosition = new Vector2(i, j + offset);
-                    int randomChip = Random.Range(0, chips.Length);
-                    int maxIterations = 0;
-                    while (MatchesAt(i, j, chips[randomChip]) && maxIterations < 100)
+                    if (!concreteTiles[i, j])
                     {
-                        randomChip = Random.Range(0, chips.Length);
-                        maxIterations++;
-                    }
-                    maxIterations = 0;
-                    GameObject chip = Instantiate(chips[randomChip], chipPosition, Quaternion.identity);
-                    chip.GetComponent<Chip>().row = j;
-                    chip.GetComponent<Chip>().column = i;
+                        Vector2 chipPosition = new Vector2(i, j + offset);
+                        int randomChip = Random.Range(0, chips.Length);
+                        int maxIterations = 0;
+                        while (MatchesAt(i, j, chips[randomChip]) && maxIterations < 100)
+                        {
+                            randomChip = Random.Range(0, chips.Length);
+                            maxIterations++;
+                        }
+                        maxIterations = 0;
+                        GameObject chip = Instantiate(chips[randomChip], chipPosition, Quaternion.identity);
+                        chip.GetComponent<Chip>().row = j;
+                        chip.GetComponent<Chip>().column = i;
 
-                    chip.transform.parent = transform;
-                    chip.name = "( " + i + ", " + j + " )";
-                    allChips[i, j] = chip;
+                        chip.transform.parent = transform;
+                        chip.name = "( " + i + ", " + j + " )";
+                        allChips[i, j] = chip;
+                    }
                 }
             }
         }
@@ -355,6 +375,8 @@ public class Board : MonoBehaviour
                     lockTiles[column, row] = null;
                 }
             }
+            DamageConcreteTiles(column, row);
+
             if (goalManager != null)
             {
                 goalManager.CompareGoal(allChips[column, row].tag.ToString());
@@ -394,16 +416,64 @@ public class Board : MonoBehaviour
                 }
             }
         }
-        StartCoroutine(DecreaseRow2());
+        StartCoroutine(DecreaseRow());
     }
 
-    IEnumerator DecreaseRow2()
+    void DamageConcreteTiles(int column, int row)
+    {
+        if (column > 0)
+        {
+            if (concreteTiles[column - 1, row])
+            {
+                concreteTiles[column - 1, row].TakeDamage(1);
+                if (concreteTiles[column - 1, row].hitPoints <= 0)
+                {
+                    concreteTiles[column - 1, row] = null;
+                }
+            }
+        }
+        if (column < width - 1)
+        {
+            if (concreteTiles[column + 1, row])
+            {
+                concreteTiles[column + 1, row].TakeDamage(1);
+                if (concreteTiles[column + 1, row].hitPoints <= 0)
+                {
+                    concreteTiles[column + 1, row] = null;
+                }
+            }
+        }
+        if (row > 0)
+        {
+            if (concreteTiles[column, row - 1])
+            {
+                concreteTiles[column, row - 1].TakeDamage(1);
+                if (concreteTiles[column, row - 1].hitPoints <= 0)
+                {
+                    concreteTiles[column, row - 1] = null;
+                }
+            }
+        }
+        if (row < height - 1)
+        {
+            if (concreteTiles[column, row + 1])
+            {
+                concreteTiles[column, row + 1].TakeDamage(1);
+                if (concreteTiles[column, row + 1].hitPoints <= 0)
+                {
+                    concreteTiles[column, row + 1] = null;
+                }
+            }
+        }
+    }
+
+    IEnumerator DecreaseRow()
     {
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)
             {
-                if (!blankSpaces[i, j] && allChips[i, j] == null)
+                if (!blankSpaces[i, j] && allChips[i, j] == null && !concreteTiles[i, j])
                 {
                     for (int k = j + 1; k < height; k++)
                     {
@@ -420,28 +490,6 @@ public class Board : MonoBehaviour
         yield return new WaitForSeconds(refillDelay * 0.5f);
         StartCoroutine(FillBoard());
     }
-    IEnumerator DecreaseRow()
-    {
-        int nullCount = 0;
-        for (int i = 0; i < width; i++)
-        {
-            for (int j = 0; j < height; j++)
-            {
-                if (allChips[i, j] == null)
-                {
-                    nullCount++;
-                }
-                else if (nullCount > 0)
-                {
-                    allChips[i, j].GetComponent<Chip>().row -= nullCount;
-                    allChips[i, j] = null;
-                }
-            }
-            nullCount = 0;
-        }
-        yield return new WaitForSeconds(0.5f);
-        StartCoroutine(FillBoard());
-    }
 
     void RefillBoard()
     {
@@ -449,7 +497,7 @@ public class Board : MonoBehaviour
         {
             for (int j = 0; j < height; j++)
             {
-                if (allChips[i, j] == null && !blankSpaces[i, j])
+                if (allChips[i, j] == null && !blankSpaces[i, j] && !concreteTiles[i, j])
                 {
                     Vector2 tempPosition = new Vector2(i, j + offset);
                     int randomChip = Random.Range(0, chips.Length);
@@ -614,7 +662,7 @@ public class Board : MonoBehaviour
         {
             for (int j = 0; j < height; j++)
             {
-                if (!blankSpaces[i, j])
+                if (!blankSpaces[i, j] && !concreteTiles[i, j])
                 {
                     int randomChip = Random.Range(0, currentBoard.Count);
                     int maxIterations = 0;

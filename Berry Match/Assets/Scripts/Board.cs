@@ -15,7 +15,10 @@ public enum TileKind
 {
     Breakable,
     Blank,
-    Normal
+    Lock,
+    Concrete,
+    Slime,
+    Normal 
 }
 
 [System.Serializable]
@@ -44,6 +47,7 @@ public class Board : MonoBehaviour
     public int offset = 10;
     public GameObject tilePrefab;
     public GameObject breakableTilePrefab;
+    public GameObject lockTilePrefab;
     public GameObject[] chips;
     public GameObject[,] allChips;
     public GameObject destroyEffect;
@@ -58,6 +62,7 @@ public class Board : MonoBehaviour
     bool[,] blankSpaces;
     MatchFinder matchFinder;
     BreakableTile[,] breakableTiles;
+    public BreakableTile[,] lockTiles;
     ScoreManager scoreManager;
     SoundManager soundManager;
     GoalManager goalManager;
@@ -89,6 +94,7 @@ public class Board : MonoBehaviour
         allChips = new GameObject[width, height];
         blankSpaces = new bool[width, height];
         breakableTiles = new BreakableTile[width, height];
+        lockTiles = new BreakableTile[width, height];
         matchFinder = FindObjectOfType<MatchFinder>();
         scoreManager = FindObjectOfType<ScoreManager>();
         soundManager = FindObjectOfType<SoundManager>();
@@ -119,12 +125,26 @@ public class Board : MonoBehaviour
                 breakableTiles[boardLayout[i].x, boardLayout[i].y] = tile.GetComponent<BreakableTile>();
             }
         }
+    } 
+    
+    void GenerateLockTiles()
+    {
+        for (int i = 0; i < boardLayout.Length; i++)
+        {
+            if (boardLayout[i].tileKind == TileKind.Lock)
+            {
+                Vector2 tempPosition = new Vector2(boardLayout[i].x, boardLayout[i].y);
+                GameObject tile = Instantiate(lockTilePrefab, tempPosition, Quaternion.identity);
+                lockTiles[boardLayout[i].x, boardLayout[i].y] = tile.GetComponent<BreakableTile>();
+            }
+        }
     }
 
     void SetUp()
     {
         GenerateBlanckSpaces();
         GenerateBreakableTiles();
+        GenerateLockTiles();
 
         for (int i = 0; i < width; i++)
         {
@@ -327,7 +347,14 @@ public class Board : MonoBehaviour
                     breakableTiles[column, row] = null;
                 }
             }
-
+            if (lockTiles[column, row] != null)
+            {
+                lockTiles[column, row].TakeDamage(1);
+                if (lockTiles[column, row].hitPoints <= 0)
+                {
+                    lockTiles[column, row] = null;
+                }
+            }
             if (goalManager != null)
             {
                 goalManager.CompareGoal(allChips[column, row].tag.ToString());

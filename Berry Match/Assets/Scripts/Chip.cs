@@ -178,19 +178,25 @@ public class Chip : MonoBehaviour
         otherChip = board.allChips[column + (int)direction.x, row + (int)direction.y];
         previousRow = row;
         previousColumn = column;
-        if (otherChip != null)
+        if (board.lockTiles[column, row] == null && board.lockTiles[column + (int)direction.x, row + (int)direction.y] == null)
         {
-            otherChip.GetComponent<Chip>().column += -1 * (int)direction.x;
-            otherChip.GetComponent<Chip>().row += -1 * (int)direction.y;
-            column += (int)direction.x;
-            row += (int)direction.y;
-            StartCoroutine(CheckMove());
+            if (otherChip != null)
+            {
+                otherChip.GetComponent<Chip>().column += -1 * (int)direction.x;
+                otherChip.GetComponent<Chip>().row += -1 * (int)direction.y;
+                column += (int)direction.x;
+                row += (int)direction.y;
+                StartCoroutine(CheckMove());
+            }
+            else
+            {
+                board.currentState = GameState.move;
+            }
         }
         else
         {
             board.currentState = GameState.move;
         }
-
     }
 
     private void Swipe()

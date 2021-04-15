@@ -23,16 +23,16 @@ MonoBehaviour:
     tileKind: 4
   - x: 2
     y: 2
-    tileKind: 3
+    tileKind: 4
   - x: 4
     y: 4
-    tileKind: 3
+    tileKind: 4
   - x: 3
     y: 4
-    tileKind: 3
+    tileKind: 4
   - x: 4
     y: 3
-    tileKind: 3
+    tileKind: 4
   chips:
   - {fileID: 314948106234814126, guid: 03f24a8932c058b4389cf7858eee0640, type: 3}
   - {fileID: 3278900296866047159, guid: 83d46809405c63a4b8c8287b15771c50, type: 3}

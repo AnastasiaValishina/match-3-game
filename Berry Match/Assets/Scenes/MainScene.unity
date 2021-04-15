@@ -2132,6 +2132,8 @@ MonoBehaviour:
     type: 3}
   concreteTilePrefab: {fileID: 7786154601545865855, guid: 21d5380e66306df4b96ccc4701440e05,
     type: 3}
+  slimeTilePrefab: {fileID: 986919109607367176, guid: d315e157552d8ba47a3f4086aba58641,
+    type: 3}
   chips:
   - {fileID: 4709689943143386111, guid: 5b91db177c3c6f24d89929c677c93c6d, type: 3}
   - {fileID: 314948106234814126, guid: 03f24a8932c058b4389cf7858eee0640, type: 3}

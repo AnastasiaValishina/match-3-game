@@ -17,10 +17,10 @@ MonoBehaviour:
   boardLayout:
   - x: 3
     y: 3
-    tileKind: 3
+    tileKind: 4
   - x: 1
     y: 2
-    tileKind: 3
+    tileKind: 4
   - x: 2
     y: 2
     tileKind: 3

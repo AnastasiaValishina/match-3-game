@@ -44,7 +44,6 @@ public class LevelItem : MonoBehaviour
             }
 
             starsActive = gameData.saveData.stars[level - 1];
-            Debug.Log(starsActive);
         }
     }
 

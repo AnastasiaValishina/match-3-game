@@ -14,8 +14,8 @@ TagManager:
   - IceWhole
   - Board
   - Concrete
-  - Chocolate
   - Lock
+  - Slime
   layers:
   - Default
   - TransparentFX

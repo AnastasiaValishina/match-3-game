@@ -10,6 +10,7 @@ public class ScoreManager : MonoBehaviour
     public int score;
     Board board;
     GameData gameData;
+    int numberStars;
 
     void Start()
     {
@@ -27,13 +28,29 @@ public class ScoreManager : MonoBehaviour
     {
         score += amount;
 
+        for (int i = 0; i < board.scoreGoals.Length; i++)
+        {
+            if (score > board.scoreGoals[i] && numberStars < i + 1)
+            {
+                numberStars++;
+            }
+        }
+
         if (gameData != null)
         {
             int highScore = gameData.saveData.highScores[board.level];
             if (score > highScore)
             {
                 gameData.saveData.highScores[board.level] = score;
+                gameData.saveData.stars[board.level] = numberStars;
             }
+
+            int currentStars = gameData.saveData.stars[board.level];
+            if (numberStars > currentStars)
+            {
+                gameData.saveData.stars[board.level] = numberStars;
+            }
+
             gameData.Save();
         }
 

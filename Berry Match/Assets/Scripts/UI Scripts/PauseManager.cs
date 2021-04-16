@@ -14,10 +14,15 @@ public class PauseManager : MonoBehaviour
 
     public bool isPaused = false;
     Board board;
+    SoundManager soundManager;
 
     
     void Start()
     {
+        board = FindObjectOfType<Board>();
+        pausePanel.SetActive(false);
+        soundManager = FindObjectOfType<SoundManager>();
+
         // if sound = 0 mute, if sound = 1 unmute
         if (PlayerPrefs.HasKey("Sound"))
         {
@@ -34,9 +39,6 @@ public class PauseManager : MonoBehaviour
         {
             soundButtonIcon.sprite = musicOnSprite;
         }
-
-        board = FindObjectOfType<Board>();
-        pausePanel.SetActive(false);
     }
 
     private void Update()
@@ -61,17 +63,20 @@ public class PauseManager : MonoBehaviour
             {
                 soundButtonIcon.sprite = musicOnSprite;
                 PlayerPrefs.SetInt("Sound", 1);
+                soundManager.AdjustVolume();
             }
             else
             {
                 soundButtonIcon.sprite = musicOffSprite;
                 PlayerPrefs.SetInt("Sound", 0);
+                soundManager.AdjustVolume();
             }
         }
         else
         {
             soundButtonIcon.sprite = musicOffSprite;
             PlayerPrefs.SetInt("Sound", 1);
+            soundManager.AdjustVolume();
         }
     }
     public void PauseGame()

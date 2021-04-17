@@ -1,0 +1,99 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c632b786675ab9f49a1aa1014812823a, type: 3}
+  m_Name: Level 4
+  m_EditorClassIdentifier: 
+  width: 5
+  height: 8
+  boardLayout:
+  - x: 1
+    y: 1
+    tileKind: 0
+  - x: 2
+    y: 1
+    tileKind: 0
+  - x: 3
+    y: 1
+    tileKind: 0
+  - x: 1
+    y: 2
+    tileKind: 0
+  - x: 2
+    y: 2
+    tileKind: 0
+  - x: 3
+    y: 2
+    tileKind: 0
+  - x: 1
+    y: 3
+    tileKind: 0
+  - x: 2
+    y: 3
+    tileKind: 0
+  - x: 3
+    y: 3
+    tileKind: 0
+  - x: 1
+    y: 4
+    tileKind: 0
+  - x: 2
+    y: 4
+    tileKind: 0
+  - x: 3
+    y: 4
+    tileKind: 0
+  - x: 1
+    y: 5
+    tileKind: 0
+  - x: 2
+    y: 5
+    tileKind: 0
+  - x: 3
+    y: 5
+    tileKind: 0
+  - x: 1
+    y: 6
+    tileKind: 0
+  - x: 2
+    y: 6
+    tileKind: 0
+  - x: 3
+    y: 6
+    tileKind: 0
+  - x: 0
+    y: 3
+    tileKind: 0
+  - x: 0
+    y: 4
+    tileKind: 0
+  - x: 4
+    y: 3
+    tileKind: 0
+  - x: 4
+    y: 4
+    tileKind: 0
+  chips:
+  - {fileID: 314948106234814126, guid: 03f24a8932c058b4389cf7858eee0640, type: 3}
+  - {fileID: 3278900296866047159, guid: 83d46809405c63a4b8c8287b15771c50, type: 3}
+  - {fileID: 6865011872285728576, guid: aa699f600d51c9e4a95a4797d5c99b80, type: 3}
+  - {fileID: 6722824701471489412, guid: 1cc6c48c5dfd2b341ada5c6030c69606, type: 3}
+  - {fileID: 4709689943143386111, guid: 5b91db177c3c6f24d89929c677c93c6d, type: 3}
+  scoreGoals: 640000009001000058020000
+  endGameRequirements:
+    gameType: 1
+    counterValue: 90
+  levelGoals:
+  - numberNeeded: 18
+    numberCollected: 18
+    goalSprite: {fileID: 7726078789101045172, guid: c00f9a9cf35bd1e45a70333b7b6197ac,
+      type: 3}
+    matchValue: IceWhole

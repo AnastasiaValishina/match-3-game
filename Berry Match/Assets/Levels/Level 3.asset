@@ -15,48 +15,53 @@ MonoBehaviour:
   width: 5
   height: 6
   boardLayout:
+  - x: 0
+    y: 1
+    tileKind: 3
   - x: 1
     y: 1
-    tileKind: 0
+    tileKind: 3
+  - x: 3
+    y: 1
+    tileKind: 3
+  - x: 4
+    y: 1
+    tileKind: 3
+  - x: 0
+    y: 2
+    tileKind: 3
   - x: 1
     y: 2
-    tileKind: 0
+    tileKind: 3
+  - x: 3
+    y: 2
+    tileKind: 3
+  - x: 4
+    y: 2
+    tileKind: 3
+  - x: 0
+    y: 3
+    tileKind: 3
   - x: 1
     y: 3
-    tileKind: 0
-  - x: 1
-    y: 4
-    tileKind: 0
-  - x: 1
-    y: 5
-    tileKind: 0
-  - x: 0
-    y: 1
-    tileKind: 0
-  - x: 0
-    y: 0
-    tileKind: 0
-  - x: 2
-    y: 0
-    tileKind: 0
-  - x: 2
-    y: 5
-    tileKind: 0
-  - x: 2
+    tileKind: 3
+  - x: 3
     y: 3
-    tileKind: 0
+    tileKind: 3
+  - x: 4
+    y: 3
+    tileKind: 3
   chips:
   - {fileID: 4709689943143386111, guid: 5b91db177c3c6f24d89929c677c93c6d, type: 3}
   - {fileID: 314948106234814126, guid: 03f24a8932c058b4389cf7858eee0640, type: 3}
   - {fileID: 3278900296866047159, guid: 83d46809405c63a4b8c8287b15771c50, type: 3}
   - {fileID: 6865011872285728576, guid: aa699f600d51c9e4a95a4797d5c99b80, type: 3}
-  scoreGoals: e8030000
+  scoreGoals: 640000009001000058020000
   endGameRequirements:
     gameType: 0
     counterValue: 20
   levelGoals:
-  - numberNeeded: 10
-    numberCollected: 0
-    goalSprite: {fileID: 7726078789101045172, guid: c00f9a9cf35bd1e45a70333b7b6197ac,
-      type: 3}
-    matchValue: IceWhole
+  - numberNeeded: 12
+    numberCollected: 12
+    goalSprite: {fileID: 21300000, guid: a81537dcee011ca489c2c6868965cb22, type: 3}
+    matchValue: Concrete

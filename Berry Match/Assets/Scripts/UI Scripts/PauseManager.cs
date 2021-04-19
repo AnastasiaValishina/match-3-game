@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 public class PauseManager : MonoBehaviour
 {
     [SerializeField] GameObject pausePanel;
+    [SerializeField] GameObject shadowPanel;
     [SerializeField] Image soundButtonIcon;
     [SerializeField] Sprite musicOnSprite;
     [SerializeField] Sprite musicOffSprite;
@@ -20,7 +21,7 @@ public class PauseManager : MonoBehaviour
     void Start()
     {
         board = FindObjectOfType<Board>();
-        pausePanel.SetActive(false);
+        shadowPanel.SetActive(false);
         soundManager = FindObjectOfType<SoundManager>();
 
         // if sound = 0 mute, if sound = 1 unmute
@@ -38,20 +39,6 @@ public class PauseManager : MonoBehaviour
         else
         {
             soundButtonIcon.sprite = musicOnSprite;
-        }
-    }
-
-    private void Update()
-    {
-        if (isPaused && !pausePanel.activeInHierarchy)
-        {
-            pausePanel.SetActive(true);
-            board.currentState = GameState.pause;
-        }
-        if (!isPaused && pausePanel.activeInHierarchy)
-        {
-            pausePanel.SetActive(false);
-            board.currentState = GameState.move;
         }
     }
 
@@ -81,10 +68,18 @@ public class PauseManager : MonoBehaviour
     }
     public void PauseGame()
     {
-        pausePanel.GetComponent<RectTransform>().DOAnchorPosY(473, 2f).SetEase(Ease.OutCubic);
         if (isPaused)
         {
-            pausePanel.GetComponent<RectTransform>().DOAnchorPosY(-522, 2f).SetEase(Ease.InCubic);
+            shadowPanel.SetActive(false);
+            pausePanel.GetComponent<RectTransform>().DOAnchorPosY(-522, 1f).SetEase(Ease.InSine);
+            board.currentState = GameState.move;
+        }
+
+        if (!isPaused)
+        {
+            shadowPanel.SetActive(true);
+            pausePanel.GetComponent<RectTransform>().DOAnchorPosY(473, 1f).SetEase(Ease.OutSine);
+            board.currentState = GameState.pause;
         }
         isPaused = !isPaused;
     }

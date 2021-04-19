@@ -9,7 +9,7 @@ public class StartManager : MonoBehaviour
 
     void Start()
     {
-        startScreen.SetActive(true);
+    //    startScreen.SetActive(true);
         levelScreen.SetActive(false);
     }
 

@@ -76,7 +76,7 @@ public class GoalManager : MonoBehaviour
             if (levelGoals[i].numberCollected >= levelGoals[i].numberNeeded)
             {
                 goalsCompleted++;
-                currentGoals[i].chipText.text = "" + levelGoals[i].numberCollected + "/" + levelGoals[i].numberNeeded;
+                currentGoals[i].chipText.text = "" + levelGoals[i].numberNeeded + "/" + levelGoals[i].numberNeeded;
             }
         }
         if (goalsCompleted >= levelGoals.Length)
@@ -85,8 +85,7 @@ public class GoalManager : MonoBehaviour
             {
                 endGameManager.WinGame();
             }
-            Debug.Log("win");
-        }
+         }
     }
 
     public void CompareGoal(string goalToCompare)

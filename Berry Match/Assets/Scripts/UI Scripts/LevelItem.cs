@@ -13,15 +13,12 @@ public class LevelItem : MonoBehaviour
     public bool isActive;
     public Image shadow;
 
-
- //   Image buttonImage;
     Button itemButton;
     GameData gameData;
     int starsActive;
 
     void Start()
     {
-        //    buttonImage = GetComponent<Image>();
         gameData = FindObjectOfType<GameData>();
         itemButton = GetComponent<Button>();
         LoadData();
@@ -77,7 +74,6 @@ public class LevelItem : MonoBehaviour
         for (int i = 0; i < starsActive; i++)
         {
             stars[i].enabled = true;
-            Debug.Log(i + " activated");
         }
     }
 }

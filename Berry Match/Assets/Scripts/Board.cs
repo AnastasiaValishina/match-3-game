@@ -110,7 +110,7 @@ public class Board : MonoBehaviour
         currentState = GameState.pause;
     }
 
-    public void GenerateBlanckSpaces()
+    public void GenerateBlankSpaces()
     {
         for (int i = 0; i < boardLayout.Length; i++)
         {
@@ -175,7 +175,7 @@ public class Board : MonoBehaviour
 
     void SetUp()
     {
-        GenerateBlanckSpaces();
+        GenerateBlankSpaces();
         GenerateBreakableTiles();
         GenerateLockTiles();
         GenerateConcreteTiles();
@@ -610,6 +610,7 @@ public class Board : MonoBehaviour
                     }
                     maxIterations = 0;
                     GameObject chip = Instantiate(chips[randomChip], tempPosition, Quaternion.identity);
+                    chip.transform.parent = transform;
                     allChips[i, j] = chip;
                     chip.GetComponent<Chip>().row = j;
                     chip.GetComponent<Chip>().column = i;

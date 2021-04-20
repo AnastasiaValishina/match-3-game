@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using System;
 
 public class ConfirmPopup : MonoBehaviour
 {
@@ -12,14 +9,11 @@ public class ConfirmPopup : MonoBehaviour
     [SerializeField] Text highScoreText;
     [SerializeField] Text starCounterText;
     
-
-    GameData gameData;
     int starsActive;
     int highScore;
 
     void OnEnable()
     {
-        gameData = FindObjectOfType<GameData>();
         LoadData();
         ActivateStars();
         UpdateText();
@@ -27,10 +21,10 @@ public class ConfirmPopup : MonoBehaviour
 
     private void LoadData()
     {
-        if (gameData != null)
+        if (GameData.Instance != null)
         {
-            starsActive = gameData.saveData.stars[level - 1];
-            highScore = gameData.saveData.highScores[level - 1];
+            starsActive = GameData.Instance.saveData.stars[level - 1];
+            highScore = GameData.Instance.saveData.highScores[level - 1];
         }
     }
 

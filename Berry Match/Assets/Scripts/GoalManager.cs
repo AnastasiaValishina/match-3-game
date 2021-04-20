@@ -21,25 +21,23 @@ public class GoalManager : MonoBehaviour
     [SerializeField] GameObject goalHudParent;
 
     EndGameManager endGameManager;
-    Board board;
-
+ 
     void Start()
     {
         endGameManager = FindObjectOfType<EndGameManager>();
-        board = FindObjectOfType<Board>();
         GetGoals();
         SetGoalsInMenu();  
     }
 
     void GetGoals()
     {
-        if (board.level < board.world.levels.Length)
+        if (Board.Instance.level < Board.Instance.world.levels.Length)
         {
-            if (board != null &&
-                board.world != null &&
-                board.world.levels[board.level] != null)
+            if (Board.Instance != null &&
+                Board.Instance.world != null &&
+                Board.Instance.world.levels[Board.Instance.level] != null)
             {
-                levelGoals = board.world.levels[board.level].levelGoals;
+                levelGoals = Board.Instance.world.levels[Board.Instance.level].levelGoals;
                 for (int i = 0; i < levelGoals.Length; i++)
                 {
                     levelGoals[i].numberCollected = 0;

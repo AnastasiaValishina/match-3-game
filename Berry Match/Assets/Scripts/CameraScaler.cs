@@ -9,16 +9,10 @@ public class CameraScaler : MonoBehaviour
     [SerializeField] float padding = 2f;
     [SerializeField] float yOffset = 1f;
 
-    Board board;
-
     void Start()
     {
-        board = FindObjectOfType<Board>();
-        if (board != null)
-        {
-            RepositionCamera(board.width, board.height);
-            SetOrthoSize(board.width, board.height);
-        }
+        RepositionCamera(Board.Instance.width, Board.Instance.height);
+        SetOrthoSize(Board.Instance.width, Board.Instance.height);
     }
 
     void RepositionCamera(float width, float height)

@@ -65,7 +65,6 @@ public class Board : MonoBehaviour
 
     int streakValue = 1;
     bool[,] blankSpaces;
-    MatchFinder matchFinder;
     BreakableTile[,] breakableTiles;
     BreakableTile[,] concreteTiles;
     BreakableTile[,] slimeTiles;
@@ -74,6 +73,18 @@ public class Board : MonoBehaviour
     SoundManager soundManager;
     GoalManager goalManager;
     bool makeSlime = true;
+    static Board instance;
+    public static Board Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<Board>();
+            }
+            return instance;
+        }
+    }
 
     private void Awake()
     {
@@ -105,7 +116,6 @@ public class Board : MonoBehaviour
         concreteTiles = new BreakableTile[width, height];        
         lockTiles = new BreakableTile[width, height];
         slimeTiles = new BreakableTile[width, height];
-        matchFinder = FindObjectOfType<MatchFinder>();
         scoreManager = FindObjectOfType<ScoreManager>();
         soundManager = FindObjectOfType<SoundManager>();
         goalManager = FindObjectOfType<GoalManager>();
@@ -267,7 +277,7 @@ public class Board : MonoBehaviour
 
     private MatchType ColumnOrRow()
     {
-        List<Chip> matchCopy = matchFinder.currentMatches as List<Chip>; // copy of current matches
+        List<Chip> matchCopy = MatchFinder.Instance.currentMatches as List<Chip>; // copy of current matches
 
         matchType.type = 0;
         matchType.color = "";
@@ -327,7 +337,7 @@ public class Board : MonoBehaviour
 
     private void CheckToMakeBombs()
     {       
-        if (matchFinder.currentMatches.Count > 3)
+        if (MatchFinder.Instance.currentMatches.Count > 3)
         {
             MatchType typeOfMatch = ColumnOrRow();
             if (typeOfMatch.type == 1)
@@ -371,7 +381,7 @@ public class Board : MonoBehaviour
             }
             else if (typeOfMatch.type == 3)
             {
-                matchFinder.CheckForBoosters(typeOfMatch);
+                MatchFinder.Instance.CheckForBoosters(typeOfMatch);
             }
         }
     }
@@ -432,8 +442,7 @@ public class Board : MonoBehaviour
             if (goalManager != null)
             {
                 goalManager.CompareGoal(allChips[column, row].tag.ToString());
-                goalManager.UpdateGoals();
-                
+                goalManager.UpdateGoals();                
             }
 
             if (soundManager != null)
@@ -452,11 +461,11 @@ public class Board : MonoBehaviour
 
     public void DestroyMatches()
     {
-        if (matchFinder.currentMatches.Count >= 4)
+        if (MatchFinder.Instance.currentMatches.Count >= 4)
         {
             CheckToMakeBombs();
         }
-        matchFinder.currentMatches.Clear();
+        MatchFinder.Instance.currentMatches.Clear();
 
         for (int i = 0; i < width; i++)
         {
@@ -624,7 +633,7 @@ public class Board : MonoBehaviour
 
     bool MatchesOnBoard()
     {
-        matchFinder.FindAllMatches();
+        MatchFinder.Instance.FindAllMatches();
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)

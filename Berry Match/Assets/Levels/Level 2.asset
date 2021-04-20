@@ -31,21 +31,21 @@ MonoBehaviour:
     y: 4
     tileKind: 1
   chips:
-  - {fileID: 4709689943143386111, guid: 5b91db177c3c6f24d89929c677c93c6d, type: 3}
-  - {fileID: 314948106234814126, guid: 03f24a8932c058b4389cf7858eee0640, type: 3}
-  - {fileID: 3278900296866047159, guid: 83d46809405c63a4b8c8287b15771c50, type: 3}
-  - {fileID: 6865011872285728576, guid: aa699f600d51c9e4a95a4797d5c99b80, type: 3}
-  - {fileID: 6722824701471489412, guid: 1cc6c48c5dfd2b341ada5c6030c69606, type: 3}
+  - {fileID: -7952894496004479410, guid: aa699f600d51c9e4a95a4797d5c99b80, type: 3}
+  - {fileID: -2449402131090703256, guid: 5b91db177c3c6f24d89929c677c93c6d, type: 3}
+  - {fileID: 4196614675451329868, guid: 83d46809405c63a4b8c8287b15771c50, type: 3}
+  - {fileID: -8556236454190175356, guid: 03f24a8932c058b4389cf7858eee0640, type: 3}
+  - {fileID: 864983205224092360, guid: 1cc6c48c5dfd2b341ada5c6030c69606, type: 3}
   scoreGoals: 640000009001000058020000
   endGameRequirements:
     gameType: 0
     counterValue: 22
   levelGoals:
   - numberNeeded: 12
-    numberCollected: 15
-    goalSprite: {fileID: 21300000, guid: b2529eeda6de61e4eb1c94a3e225e89f, type: 3}
+    numberCollected: 18
+    goalSprite: {fileID: 21300000, guid: 709b036860c6faa43a2b13fb89d9d3c3, type: 3}
     matchValue: ChipOrange
   - numberNeeded: 12
     numberCollected: 12
-    goalSprite: {fileID: 21300000, guid: 01c33ed54b621fb45adbdfaf3be09ce3, type: 3}
+    goalSprite: {fileID: 21300000, guid: 376de09f3d283974c9cb783aa3f145b4, type: 3}
     matchValue: ChipBlue

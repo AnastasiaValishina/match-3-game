@@ -24,23 +24,14 @@ public class Chip : MonoBehaviour
     public float swipeAngle = 0;
     public float swipeResist = 1f;
 
-    Board board;
-    MatchFinder matchFinder;
-    HintManager hintManager;
-    EndGameManager endGameManager;
-
     Vector2 firstTouchPosition = Vector2.zero;
     Vector2 finalTouchPosition = Vector2.zero;
     Vector2 tempPosition;
-    SpriteRenderer myImage;
+    SpriteRenderer chipSprite;
 
     private void Start()
     {
-        board = FindObjectOfType<Board>();
-        matchFinder = FindObjectOfType<MatchFinder>();
-        hintManager = FindObjectOfType<HintManager>();
-        endGameManager = FindObjectOfType<EndGameManager>();
-        myImage = GetComponent<SpriteRenderer>();
+        chipSprite = GetComponent<SpriteRenderer>();
         AnimationLanding();
     }
 
@@ -53,38 +44,38 @@ public class Chip : MonoBehaviour
             //Move towards target
             tempPosition = new Vector2(targetX, transform.position.y);
             transform.position = Vector2.Lerp(transform.position, tempPosition, 0.6f);
-            if (board.allChips[column, row] != gameObject)
+            if (Board.Instance.allChips[column, row] != gameObject)
             {
-                board.allChips[column, row] = this;
+                Board.Instance.allChips[column, row] = this;
             //    matchFinder.FindAllMatches();
             }
-            matchFinder.FindAllMatches();
+            MatchFinder.Instance.FindAllMatches();
         }
         else
         {
             //diractly set position
             tempPosition = new Vector2(targetX, transform.position.y);
             transform.position = tempPosition;
-            board.allChips[column, row] = this;
+            Board.Instance.allChips[column, row] = this;
         }
         if (Mathf.Abs(targetY - transform.position.y) > 0.1)
         {
             //Move towards target
             tempPosition = new Vector2(transform.position.x, targetY);
             transform.position = Vector2.Lerp(transform.position, tempPosition, 0.6f);
-            if (board.allChips[column, row] != gameObject)
+            if (Board.Instance.allChips[column, row] != gameObject)
             {
-                board.allChips[column, row] = this;
+                Board.Instance.allChips[column, row] = this;
            //     matchFinder.FindAllMatches();
             }
-            matchFinder.FindAllMatches();
+            MatchFinder.Instance.FindAllMatches();
         }
         else
         {
             //directly set position
             tempPosition = new Vector2(transform.position.x, targetY);
             transform.position = tempPosition;
-            board.allChips[column, row] = this;
+            Board.Instance.allChips[column, row] = this;
         }
     }
 
@@ -92,12 +83,12 @@ public class Chip : MonoBehaviour
     {
         if (isColorBomb)
         {
-            matchFinder.MatchChipsOfColor(otherChip.tag);
+            MatchFinder.Instance.MatchChipsOfColor(otherChip.tag);
             isMatched = true;
         }
         else if (otherChip.isColorBomb)
         {
-            matchFinder.MatchChipsOfColor(gameObject.tag);
+            MatchFinder.Instance.MatchChipsOfColor(gameObject.tag);
             otherChip.isMatched = true;
         }
         yield return new WaitForSeconds(0.5f);
@@ -111,33 +102,33 @@ public class Chip : MonoBehaviour
                 row = previousRow;
                 column = previousColumn;
                 yield return new WaitForSeconds(0.5f);
-                board.currentChip = null;
-                board.currentState = GameState.move;
+                Board.Instance.currentChip = null;
+                Board.Instance.currentState = GameState.move;
             }
             else
             {
-                if (endGameManager != null)
+                if (EndGameManager.Instance != null)
                 {
-                    if (endGameManager.requirements.gameType == GameType.Moves)
+                    if (EndGameManager.Instance.requirements.gameType == GameType.Moves)
                     {
-                        endGameManager.DecreaseCounterValue();
+                        EndGameManager.Instance.DecreaseCounterValue();
                     }
                 }
-                board.DestroyMatches();
+                Board.Instance.DestroyMatches();
             }
             //otherChip = null;
         }
     }
     private void OnMouseDown()
     {
-        if (hintManager != null)
+        if (HintManager.Instance != null)
         {
-            hintManager.DestroyHint();
+            HintManager.Instance.DestroyHint();
         }
 
         AnimationTouch();
 
-        if (board.currentState == GameState.move)
+        if (Board.Instance.currentState == GameState.move)
         {
             firstTouchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
@@ -145,7 +136,7 @@ public class Chip : MonoBehaviour
 
     private void OnMouseUp()
     {
-        if(board.currentState == GameState.move)
+        if(Board.Instance.currentState == GameState.move)
         {
             finalTouchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             CalculateAngle();
@@ -157,23 +148,23 @@ public class Chip : MonoBehaviour
         if (Mathf.Abs(finalTouchPosition.y - firstTouchPosition.y) > swipeResist || 
             Mathf.Abs(finalTouchPosition.x - firstTouchPosition.x) > swipeResist)
         {
-            board.currentState = GameState.wait;
+            Board.Instance.currentState = GameState.wait;
             swipeAngle = Mathf.Atan2(finalTouchPosition.y - firstTouchPosition.y, finalTouchPosition.x - firstTouchPosition.x) * 180 / Mathf.PI;
             Swipe();
-            board.currentChip = this;
+            Board.Instance.currentChip = this;
         }
         else
         {
-            board.currentState = GameState.move;
+            Board.Instance.currentState = GameState.move;
         }
     }
 
     void MoveChips(Vector2 direction)
     {
-        otherChip = board.allChips[column + (int)direction.x, row + (int)direction.y];
+        otherChip = Board.Instance.allChips[column + (int)direction.x, row + (int)direction.y];
         previousRow = row;
         previousColumn = column;
-        if (board.lockTiles[column, row] == null && board.lockTiles[column + (int)direction.x, row + (int)direction.y] == null)
+        if (Board.Instance.lockTiles[column, row] == null && Board.Instance.lockTiles[column + (int)direction.x, row + (int)direction.y] == null)
         {
             if (otherChip != null)
             {
@@ -185,22 +176,22 @@ public class Chip : MonoBehaviour
             }
             else
             {
-                board.currentState = GameState.move;
+                Board.Instance.currentState = GameState.move;
             }
         }
         else
         {
-            board.currentState = GameState.move;
+            Board.Instance.currentState = GameState.move;
         }
     }
 
     private void Swipe()
     {
-        if (swipeAngle > -45 && swipeAngle <= 45 && column < board.width - 1)
+        if (swipeAngle > -45 && swipeAngle <= 45 && column < Board.Instance.width - 1)
         {
             MoveChips(Vector2.right);
         }
-        else if (swipeAngle > 45 && swipeAngle <= 135 && row < board.height - 1)
+        else if (swipeAngle > 45 && swipeAngle <= 135 && row < Board.Instance.height - 1)
         {
             MoveChips(Vector2.up);
         }
@@ -214,7 +205,7 @@ public class Chip : MonoBehaviour
         }
         else
         {
-            board.currentState = GameState.move;
+            Board.Instance.currentState = GameState.move;
         }
     }
 
@@ -243,7 +234,7 @@ public class Chip : MonoBehaviour
         if (!isRowArrow &&!isColumnArrow && !isBomb)
         {
             isColorBomb = true;
-            myImage.sprite = colorBomb;
+            chipSprite.sprite = colorBomb;
             gameObject.tag = "RainbowBomb";
         }
     }

@@ -5,13 +5,21 @@ using System.Linq;
 
 public class MatchFinder : MonoBehaviour
 {
-    Board board;
     public List<Chip> currentMatches = new List<Chip>();
+    static MatchFinder instance;
 
-    void Start()
+    public static MatchFinder Instance
     {
-        board = FindObjectOfType<Board>();
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<MatchFinder>();
+            }
+            return instance;
+        }
     }
+
 
     public void FindAllMatches()
     {
@@ -46,19 +54,19 @@ public class MatchFinder : MonoBehaviour
         if (chip1.isRowArrow)
         {
             currentMatches.Union(GetRowChips(chip1.row));
-            board.BombRow(chip1.row);
+            Board.Instance.BombRow(chip1.row);
         }
 
         if (chip2.isRowArrow)
         {
             currentMatches.Union(GetRowChips(chip2.row));
-            board.BombRow(chip2.row);
+            Board.Instance.BombRow(chip2.row);
         }
 
         if (chip3.isRowArrow)
         {
             currentMatches.Union(GetRowChips(chip3.row));
-            board.BombRow(chip3.row);
+            Board.Instance.BombRow(chip3.row);
         }
         return currentChips;
     }
@@ -70,19 +78,19 @@ public class MatchFinder : MonoBehaviour
         if (chip1.isColumnArrow)
         {
             currentMatches.Union(GetColumnChips(chip1.column));
-            board.BombColumn(chip1.column);
+            Board.Instance.BombColumn(chip1.column);
         }
 
         if (chip2.isColumnArrow)
         {
             currentMatches.Union(GetColumnChips(chip2.column));
-            board.BombColumn(chip2.column);
+            Board.Instance.BombColumn(chip2.column);
         }
 
         if (chip3.isColumnArrow)
         {
             currentMatches.Union(GetColumnChips(chip3.column));
-            board.BombColumn(chip2.column);
+            Board.Instance.BombColumn(chip2.column);
         }
         return currentChips;
     }
@@ -106,17 +114,17 @@ public class MatchFinder : MonoBehaviour
     {
         yield return new WaitForSeconds(0.2f);
 
-        for (int i = 0; i < board.width; i++)
+        for (int i = 0; i < Board.Instance.width; i++)
         {
-            for (int j = 0; j < board.height; j++)
+            for (int j = 0; j < Board.Instance.height; j++)
             {
-                Chip currentChip = board.allChips[i, j];
+                Chip currentChip = Board.Instance.allChips[i, j];
                 if (currentChip != null)
                 {
-                    if (i > 0 && i < board.width - 1)
+                    if (i > 0 && i < Board.Instance.width - 1)
                     {
-                        Chip leftChip = board.allChips[i - 1, j];
-                        Chip rightChip = board.allChips[i + 1, j];
+                        Chip leftChip = Board.Instance.allChips[i - 1, j];
+                        Chip rightChip = Board.Instance.allChips[i + 1, j];
 
                         if (leftChip != null && rightChip != null)
                         {
@@ -132,10 +140,10 @@ public class MatchFinder : MonoBehaviour
                             }
                         }
                     }
-                    if (j > 0 && j < board.height - 1)
+                    if (j > 0 && j < Board.Instance.height - 1)
                     {
-                        Chip upperChip = board.allChips[i, j + 1];
-                        Chip lowerChip = board.allChips[i, j - 1];
+                        Chip upperChip = Board.Instance.allChips[i, j + 1];
+                        Chip lowerChip = Board.Instance.allChips[i, j - 1];
 
                         if (upperChip != null && lowerChip != null)
                         {
@@ -159,13 +167,13 @@ public class MatchFinder : MonoBehaviour
 
     public void MatchChipsOfColor(string color)
     {
-        for (int i = 0; i < board.width; i++)
+        for (int i = 0; i < Board.Instance.width; i++)
         {
-            for (int j = 0; j < board.height; j++)
+            for (int j = 0; j < Board.Instance.height; j++)
             {
-                if (board.allChips[i, j] != null && board.allChips[i, j].tag == color)
+                if (Board.Instance.allChips[i, j] != null && Board.Instance.allChips[i, j].tag == color)
                 {
-                    board.allChips[i, j].isMatched = true;
+                    Board.Instance.allChips[i, j].isMatched = true;
                 }
             }
         }
@@ -178,12 +186,12 @@ public class MatchFinder : MonoBehaviour
         {
             for (int j = row - 1; j <= row + 1; j++)
             {
-                if (i >= 0 && i < board.width && j >= 0 && j < board.height)
+                if (i >= 0 && i < Board.Instance.width && j >= 0 && j < Board.Instance.height)
                 {
-                    if (board.allChips[i, j] != null)
+                    if (Board.Instance.allChips[i, j] != null)
                     {
-                        chips.Add(board.allChips[i, j]);
-                        board.allChips[i, j].isMatched = true;
+                        chips.Add(Board.Instance.allChips[i, j]);
+                        Board.Instance.allChips[i, j].isMatched = true;
                     }
                 }
             }
@@ -194,16 +202,16 @@ public class MatchFinder : MonoBehaviour
     List<Chip> GetColumnChips(int column)
     {
         List<Chip> chips = new List<Chip>();
-        for (int i = 0; i < board.height; i++)
+        for (int i = 0; i < Board.Instance.height; i++)
         {
-            if (board.allChips[column, i] != null)
+            if (Board.Instance.allChips[column, i] != null)
             {
-                Chip chip = board.allChips[column, i];
+                Chip chip = Board.Instance.allChips[column, i];
                 if (chip.isRowArrow)
                 {
                     chips.Union(GetRowChips(i)).ToList();
                 }
-                chips.Add(board.allChips[column, i]);
+                chips.Add(Board.Instance.allChips[column, i]);
                 chip.isMatched = true; ;
             }
         }
@@ -213,16 +221,16 @@ public class MatchFinder : MonoBehaviour
     List<Chip> GetRowChips(int row)
     {
         List<Chip> chips = new List<Chip>();
-        for (int i = 0; i < board.width; i++)
+        for (int i = 0; i < Board.Instance.width; i++)
         {
-            if (board.allChips[i, row] != null)
+            if (Board.Instance.allChips[i, row] != null)
             {
-                Chip chip = board.allChips[i, row];
+                Chip chip = Board.Instance.allChips[i, row];
                 if (chip.isColumnArrow)
                 {
                     chips.Union(GetColumnChips(i)).ToList();
                 }
-                chips.Add(board.allChips[i, row]);
+                chips.Add(Board.Instance.allChips[i, row]);
                 chip.isMatched = true; ;
             }
         }
@@ -231,32 +239,32 @@ public class MatchFinder : MonoBehaviour
 
     public void CheckForBoosters(MatchType matchType)
     {
-        if (board.currentChip != null)
+        if (Board.Instance.currentChip != null)
         {
-            if (board.currentChip.isMatched && board.currentChip.tag == matchType.color)
+            if (Board.Instance.currentChip.isMatched && Board.Instance.currentChip.tag == matchType.color)
             {
-                board.currentChip.isMatched = false;
+                Board.Instance.currentChip.isMatched = false;
 
-            if ((board.currentChip.swipeAngle > -45 && board.currentChip.swipeAngle <= 45) ||
-                 board.currentChip.swipeAngle > -135 || board.currentChip.swipeAngle <= 135)
+            if ((Board.Instance.currentChip.swipeAngle > -45 && Board.Instance.currentChip.swipeAngle <= 45) ||
+                 Board.Instance.currentChip.swipeAngle > -135 || Board.Instance.currentChip.swipeAngle <= 135)
                 {
-                    board.currentChip.MakeRowBomb();
+                    Board.Instance.currentChip.MakeRowBomb();
                 }
                 else
                 {
-                    board.currentChip.MakeColumnBomb();
+                    Board.Instance.currentChip.MakeColumnBomb();
                 }
             }
-            else if (board.currentChip.otherChip != null)
+            else if (Board.Instance.currentChip.otherChip != null)
             {
-                Chip otherChip = board.currentChip.otherChip;
+                Chip otherChip = Board.Instance.currentChip.otherChip;
                 if (otherChip.isMatched && otherChip.tag == matchType.color)
                 {
                     otherChip.isMatched = false;
                 }
 
-                if ((board.currentChip.swipeAngle > -45 && board.currentChip.swipeAngle <= 45) ||
-                     board.currentChip.swipeAngle > -135 || board.currentChip.swipeAngle <= 135)
+                if ((Board.Instance.currentChip.swipeAngle > -45 && Board.Instance.currentChip.swipeAngle <= 45) ||
+                     Board.Instance.currentChip.swipeAngle > -135 || Board.Instance.currentChip.swipeAngle <= 135)
                 {
                     otherChip.MakeRowBomb();
                 }

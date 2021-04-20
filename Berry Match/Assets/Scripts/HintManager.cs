@@ -7,13 +7,24 @@ public class HintManager : MonoBehaviour
     [SerializeField] float hintDelay = 5f; 
     [SerializeField] GameObject hintParticle;
     
-    Board board;
     float hintDelaySeconds;
     public GameObject currentHint;
+    static HintManager instance;
+
+    public static HintManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<HintManager>();
+            }
+            return instance;
+        }
+    }
 
     void Start()
     {
-        board = FindObjectOfType<Board>();
         hintDelaySeconds = hintDelay;
     }
 
@@ -30,24 +41,24 @@ public class HintManager : MonoBehaviour
     List<Chip> FindAllMatches()
     {
         List<Chip> possibleMoves = new List<Chip>();
-        for (int i = 0; i < board.width; i++)
+        for (int i = 0; i < Board.Instance.width; i++)
         {
-            for (int j = 0; j < board.height; j++)
+            for (int j = 0; j < Board.Instance.height; j++)
             {
-                if (board.allChips[i, j] != null)
+                if (Board.Instance.allChips[i, j] != null)
                 {
-                    if (i < board.width - 1)
+                    if (i < Board.Instance.width - 1)
                     {
-                        if (board.SwitchAndCheck(i, j, Vector2.right))
+                        if (Board.Instance.SwitchAndCheck(i, j, Vector2.right))
                         {
-                            possibleMoves.Add(board.allChips[i, j]);
+                            possibleMoves.Add(Board.Instance.allChips[i, j]);
                         }
                     }
-                    if (j < board.height - 1)
+                    if (j < Board.Instance.height - 1)
                     {
-                        if (board.SwitchAndCheck(i, j, Vector2.up))
+                        if (Board.Instance.SwitchAndCheck(i, j, Vector2.up))
                         {
-                            possibleMoves.Add(board.allChips[i, j]);
+                            possibleMoves.Add(Board.Instance.allChips[i, j]);
                         }
                     }
                 }

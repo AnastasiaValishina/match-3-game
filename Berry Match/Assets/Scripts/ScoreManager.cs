@@ -8,13 +8,11 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] Text scoreText;
     [SerializeField] Image scoreBar;
     public int score;
-    Board board;
     GameData gameData;
     int numberStars;
 
     void Start()
     {
-        board = FindObjectOfType<Board>();
         gameData = FindObjectOfType<GameData>();
         scoreText.text = score.ToString();
     }
@@ -28,9 +26,9 @@ public class ScoreManager : MonoBehaviour
     {
         score += amount;
 
-        for (int i = 0; i < board.scoreGoals.Length; i++)
+        for (int i = 0; i < Board.Instance.scoreGoals.Length; i++)
         {
-            if (score > board.scoreGoals[i] && numberStars < i + 1)
+            if (score > Board.Instance.scoreGoals[i] && numberStars < i + 1)
             {
                 numberStars++;
             }
@@ -38,17 +36,17 @@ public class ScoreManager : MonoBehaviour
 
         if (gameData != null)
         {
-            int highScore = gameData.saveData.highScores[board.level];
+            int highScore = gameData.saveData.highScores[Board.Instance.level];
             if (score > highScore)
             {
-                gameData.saveData.highScores[board.level] = score;
-                gameData.saveData.stars[board.level] = numberStars;
+                gameData.saveData.highScores[Board.Instance.level] = score;
+                gameData.saveData.stars[Board.Instance.level] = numberStars;
             }
 
-            int currentStars = gameData.saveData.stars[board.level];
+            int currentStars = gameData.saveData.stars[Board.Instance.level];
             if (numberStars > currentStars)
             {
-                gameData.saveData.stars[board.level] = numberStars;
+                gameData.saveData.stars[Board.Instance.level] = numberStars;
             }
 
             gameData.Save();
@@ -56,10 +54,10 @@ public class ScoreManager : MonoBehaviour
 
         scoreText.text = score.ToString();
         
-        if (board != null && scoreBar != null)
+        if (Board.Instance != null && scoreBar != null)
         {
-            int length = board.scoreGoals.Length;
-            scoreBar.fillAmount = (float)score / (float)board.scoreGoals[length - 1];
+            int length = Board.Instance.scoreGoals.Length;
+            scoreBar.fillAmount = (float)score / (float)Board.Instance.scoreGoals[length - 1];
         }
     }
 }

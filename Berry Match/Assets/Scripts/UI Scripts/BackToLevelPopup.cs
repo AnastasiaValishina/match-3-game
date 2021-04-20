@@ -5,20 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class BackToLevelPopup : MonoBehaviour
 {
-    GameData gameData;
-    Board board;
-
-    private void Start()
-    {
-        gameData = FindObjectOfType<GameData>();
-        board = FindObjectOfType<Board>();
-    }
     public void OnOkClickWin()
     {
-        if (gameData != null)
+        if (GameData.Instance != null)
         {
-            gameData.saveData.isActive[board.level + 1] = true;
-            gameData.Save();
+            GameData.Instance.saveData.isActive[Board.Instance.level + 1] = true;
+            GameData.Instance.Save();
         }
         SceneManager.LoadScene(0);
     }

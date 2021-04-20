@@ -26,11 +26,22 @@ public class EndGameManager : MonoBehaviour
 
     int currentCounterValue;
     float timerSeconds;
-    Board board;
+    static EndGameManager instance;
+
+    public static EndGameManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<EndGameManager>();
+            }
+            return instance;
+        }
+    }
 
     void Start()
     {
-        board = FindObjectOfType<Board>();
         SetGameType();
         SetupGame();
     }
@@ -50,13 +61,13 @@ public class EndGameManager : MonoBehaviour
 
     void SetGameType()
     {
-        if (board.level < board.world.levels.Length)
+        if (Board.Instance.level < Board.Instance.world.levels.Length)
         {
-            if (board.world != null)
+            if (Board.Instance.world != null)
             {
-                if (board.world.levels[board.level] != null)
+                if (Board.Instance.world.levels[Board.Instance.level] != null)
                 {
-                    requirements = board.world.levels[board.level].endGameRequirements;
+                    requirements = Board.Instance.world.levels[Board.Instance.level].endGameRequirements;
                 }
             }
         }
@@ -81,7 +92,7 @@ public class EndGameManager : MonoBehaviour
 
     public void DecreaseCounterValue()
     {
-        if (board.currentState != GameState.pause)
+        if (Board.Instance.currentState != GameState.pause)
         {
             currentCounterValue--;
 
@@ -96,7 +107,7 @@ public class EndGameManager : MonoBehaviour
     public void WinGame()
     {
         winPopup.SetActive(true);
-        board.currentState = GameState.win;
+        Board.Instance.currentState = GameState.win;
         currentCounterValue = 0;
         FindObjectOfType<UIAnimationController>().GameOverAnim();
     }
@@ -104,8 +115,7 @@ public class EndGameManager : MonoBehaviour
     public void LoseGame()
     {
         lostPopup.SetActive(true);
-        board.currentState = GameState.lose;
-        Debug.Log("You lost");
+        Board.Instance.currentState = GameState.lose;
         FindObjectOfType<UIAnimationController>().GameOverAnim();
     }
 }

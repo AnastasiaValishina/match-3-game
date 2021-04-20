@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -16,6 +14,19 @@ public class GameData : MonoBehaviour
 {
     public static GameData gameData;
     public SaveData saveData;
+    static GameData instance;
+
+    public static GameData Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<GameData>();
+            }
+            return instance;
+        }
+    }
 
     void Awake()
     {

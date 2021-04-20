@@ -14,13 +14,10 @@ public class PauseManager : MonoBehaviour
     [SerializeField] Sprite musicOffSprite;
 
     public bool isPaused = false;
-    Board board;
     SoundManager soundManager;
-
     
     void Start()
     {
-        board = FindObjectOfType<Board>();
         shadowPanel.SetActive(false);
         soundManager = FindObjectOfType<SoundManager>();
 
@@ -72,14 +69,14 @@ public class PauseManager : MonoBehaviour
         {
             shadowPanel.SetActive(false);
             pausePanel.GetComponent<RectTransform>().DOAnchorPosY(-522, 1f).SetEase(Ease.InSine);
-            board.currentState = GameState.move;
+            Board.Instance.currentState = GameState.move;
         }
 
         if (!isPaused)
         {
             shadowPanel.SetActive(true);
             pausePanel.GetComponent<RectTransform>().DOAnchorPosY(473, 1f).SetEase(Ease.OutSine);
-            board.currentState = GameState.pause;
+            Board.Instance.currentState = GameState.pause;
         }
         isPaused = !isPaused;
     }

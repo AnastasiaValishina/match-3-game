@@ -14,12 +14,10 @@ public class LevelItem : MonoBehaviour
     public Image shadow;
 
     Button itemButton;
-    GameData gameData;
     int starsActive;
 
     void Start()
     {
-        gameData = FindObjectOfType<GameData>();
         itemButton = GetComponent<Button>();
         LoadData();
         ActivateStars();
@@ -29,9 +27,9 @@ public class LevelItem : MonoBehaviour
 
     private void LoadData()
     {
-        if (gameData != null)
+        if (GameData.Instance != null)
         {
-            if (gameData.saveData.isActive[level - 1])
+            if (GameData.Instance.saveData.isActive[level - 1])
             {
                 isActive = true;
             }
@@ -40,7 +38,7 @@ public class LevelItem : MonoBehaviour
                 isActive = false;
             }
 
-            starsActive = gameData.saveData.stars[level - 1];
+            starsActive = GameData.Instance.saveData.stars[level - 1];
         }
     }
 

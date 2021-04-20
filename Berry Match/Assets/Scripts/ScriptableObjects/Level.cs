@@ -9,7 +9,7 @@ public class Level : ScriptableObject
     public int width = 8;
     public int height = 8;
     public TileType[] boardLayout;
-    public GameObject[] chips;
+    public Chip[] chips;
     public int[] scoreGoals;
     public EndGameRequirements endGameRequirements;
     public BlankGoal[] levelGoals;

@@ -38,27 +38,30 @@ public class TileType
 
 public class Board : MonoBehaviour
 {
-    public World world;
-    public int level;
-
     public GameState currentState = GameState.move;
-    public int width = 8;
-    public int height = 8;
     public int offset = 10;
+    public Chip[,] allChips;
+    public GameObject destroyEffect;
+    public Chip currentChip;
+    public int baseChipValue = 5;
+    public float refillDelay = 0.5f;
+    public MatchType matchType;
+
+    [Header("Prefabs")]
     public GameObject tilePrefab;
     public GameObject breakableTilePrefab;
     public GameObject lockTilePrefab;
     public GameObject concreteTilePrefab;
     public GameObject slimeTilePrefab;
-    public GameObject[] chips;
-    public GameObject[,] allChips;
-    public GameObject destroyEffect;
-    public Chip currentChip;
+    
+    [Header("Default Level")]
+    public World world;
+    public int level;
+    public int width = 8;
+    public int height = 8;
+    public Chip[] chips;
     public TileType[] boardLayout;
-    public int baseChipValue = 5;
-    public float refillDelay = 0.5f;
     public int[] scoreGoals;
-    public MatchType matchType;
 
     int streakValue = 1;
     bool[,] blankSpaces;
@@ -96,7 +99,7 @@ public class Board : MonoBehaviour
     }
     void Start()
     {
-        allChips = new GameObject[width, height];
+        allChips = new Chip[width, height];
         blankSpaces = new bool[width, height];
         breakableTiles = new BreakableTile[width, height];
         concreteTiles = new BreakableTile[width, height];        
@@ -203,9 +206,9 @@ public class Board : MonoBehaviour
                             maxIterations++;
                         }
                         maxIterations = 0;
-                        GameObject chip = Instantiate(chips[randomChip], chipPosition, Quaternion.identity);
-                        chip.GetComponent<Chip>().row = j;
-                        chip.GetComponent<Chip>().column = i;
+                        Chip chip = Instantiate(chips[randomChip], chipPosition, Quaternion.identity);
+                        chip.row = j;
+                        chip.column = i;
 
                         chip.transform.parent = transform;
                         chip.name = "( " + i + ", " + j + " )";
@@ -216,7 +219,7 @@ public class Board : MonoBehaviour
         }
     }
 
-    bool MatchesAt(int column, int row, GameObject chip)
+    bool MatchesAt(int column, int row, Chip chip)
     {
         if (column > 1 && row > 1)
         {
@@ -264,14 +267,14 @@ public class Board : MonoBehaviour
 
     private MatchType ColumnOrRow()
     {
-        List<GameObject> matchCopy = matchFinder.currentMatches as List<GameObject>; // copy of current matches
+        List<Chip> matchCopy = matchFinder.currentMatches as List<Chip>; // copy of current matches
 
         matchType.type = 0;
         matchType.color = "";
 
         for (int i = 0; i < matchCopy.Count; i++)
         {
-            Chip thisChip = matchCopy[i].GetComponent<Chip>();
+            Chip thisChip = matchCopy[i];
             string color = matchCopy[i].tag;
 
             int column = thisChip.column;
@@ -281,7 +284,7 @@ public class Board : MonoBehaviour
 
             for (int j = 0; j < matchCopy.Count; j++)
             {
-                Chip nextChip = matchCopy[j].GetComponent<Chip>();
+                Chip nextChip = matchCopy[j];
 
                 if (nextChip == thisChip)
                 {
@@ -339,7 +342,7 @@ public class Board : MonoBehaviour
                 {
                     if (currentChip.otherChip != null)
                     {
-                        Chip otherChip = currentChip.otherChip.GetComponent<Chip>();
+                        Chip otherChip = currentChip.otherChip;
                         if (otherChip.isMatched && otherChip.tag == typeOfMatch.color)
                         {
                             otherChip.isMatched = false;
@@ -358,7 +361,7 @@ public class Board : MonoBehaviour
                 }
                 else if (currentChip.otherChip != null)
                 {
-                    Chip otherChip = currentChip.otherChip.GetComponent<Chip>();
+                    Chip otherChip = currentChip.otherChip;
                     if (otherChip.isMatched && otherChip.tag == typeOfMatch.color)
                     {
                         otherChip.isMatched = false;
@@ -405,7 +408,7 @@ public class Board : MonoBehaviour
 
     void DestroyMatchesAt(int column, int row)
     {
-        if (allChips[column, row].GetComponent<Chip>().isMatched)
+        if (allChips[column, row].isMatched)
         {
             if (breakableTiles[column, row] != null)
             {
@@ -441,7 +444,7 @@ public class Board : MonoBehaviour
             GameObject particle = Instantiate(destroyEffect, allChips[column, row].transform.position, Quaternion.identity);
             Destroy(particle, 1f);
             // Play animation from chip script
-            Destroy(allChips[column, row]);
+            Destroy(allChips[column, row].gameObject);
             scoreManager.IncreaseScore(baseChipValue * streakValue);
             allChips[column, row] = null;
         }
@@ -580,7 +583,7 @@ public class Board : MonoBehaviour
                     {
                         if (allChips[i, k] != null)
                         {
-                            allChips[i, k].GetComponent<Chip>().row = j;
+                            allChips[i, k].row = j;
                             allChips[i, k] = null;
                             break;
                         }
@@ -609,11 +612,11 @@ public class Board : MonoBehaviour
                         randomChip = Random.Range(0, chips.Length);
                     }
                     maxIterations = 0;
-                    GameObject chip = Instantiate(chips[randomChip], tempPosition, Quaternion.identity);
+                    Chip chip = Instantiate(chips[randomChip], tempPosition, Quaternion.identity);
                     chip.transform.parent = transform;
                     allChips[i, j] = chip;
-                    chip.GetComponent<Chip>().row = j;
-                    chip.GetComponent<Chip>().column = i;
+                    chip.row = j;
+                    chip.column = i;
                 }
             }
         }
@@ -628,7 +631,7 @@ public class Board : MonoBehaviour
             {
                 if (allChips[i, j] != null)
                 {
-                    if (allChips[i, j].GetComponent<Chip>().isMatched)
+                    if (allChips[i, j].isMatched)
                     {
                         return true;
                     }
@@ -730,7 +733,7 @@ public class Board : MonoBehaviour
     {
         if (allChips[column + (int)direction.x, row + (int)direction.y] != null)
         {
-            GameObject holder = allChips[column + (int)direction.x, row + (int)direction.y] as GameObject;
+            Chip holder = allChips[column + (int)direction.x, row + (int)direction.y];
             allChips[column + (int)direction.x, row + (int)direction.y] = allChips[column, row];
             allChips[column, row] = holder;
         }
@@ -812,7 +815,7 @@ public class Board : MonoBehaviour
 
     void ShuffleBoard()
     {
-        List<GameObject> currentBoard = new List<GameObject>();
+        List<Chip> currentBoard = new List<Chip>();
 
         for (int i = 0; i < width; i++)
         {
@@ -839,7 +842,7 @@ public class Board : MonoBehaviour
                         maxIterations++;
                     }
                     maxIterations = 0;
-                    Chip chip = currentBoard[randomChip].GetComponent<Chip>();
+                    Chip chip = currentBoard[randomChip];
                     chip.column = i;
                     chip.row = j;
                     allChips[i, j] = currentBoard[randomChip];

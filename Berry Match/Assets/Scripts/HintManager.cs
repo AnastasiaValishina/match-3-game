@@ -27,9 +27,9 @@ public class HintManager : MonoBehaviour
         }
     }
 
-    List<GameObject> FindAllMatches()
+    List<Chip> FindAllMatches()
     {
-        List<GameObject> possibleMoves = new List<GameObject>();
+        List<Chip> possibleMoves = new List<Chip>();
         for (int i = 0; i < board.width; i++)
         {
             for (int j = 0; j < board.height; j++)
@@ -56,9 +56,9 @@ public class HintManager : MonoBehaviour
         return possibleMoves;
     }
 
-    GameObject GetRandomMatch()
+    Chip GetRandomMatch()
     {
-        List<GameObject> possibleMoves = new List<GameObject>();
+        List<Chip> possibleMoves = new List<Chip>();
         possibleMoves = FindAllMatches();
         if (possibleMoves.Count > 0)
         {
@@ -69,7 +69,7 @@ public class HintManager : MonoBehaviour
     }
     void HighlightHint()
     {
-        GameObject move = GetRandomMatch();
+        Chip move = GetRandomMatch();
         if (move != null)
         {
             currentHint = Instantiate(hintParticle, move.transform.position, Quaternion.identity);

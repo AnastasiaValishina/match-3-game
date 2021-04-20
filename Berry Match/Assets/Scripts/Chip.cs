@@ -20,7 +20,7 @@ public class Chip : MonoBehaviour
     public bool isRowArrow = false;
     public bool isColorBomb = false;
     public bool isBomb = false;
-    public GameObject otherChip;
+    public Chip otherChip;
     public float swipeAngle = 0;
     public float swipeResist = 1f;
 
@@ -55,7 +55,7 @@ public class Chip : MonoBehaviour
             transform.position = Vector2.Lerp(transform.position, tempPosition, 0.6f);
             if (board.allChips[column, row] != gameObject)
             {
-                board.allChips[column, row] = gameObject;
+                board.allChips[column, row] = this;
             //    matchFinder.FindAllMatches();
             }
             matchFinder.FindAllMatches();
@@ -65,7 +65,7 @@ public class Chip : MonoBehaviour
             //diractly set position
             tempPosition = new Vector2(targetX, transform.position.y);
             transform.position = tempPosition;
-            board.allChips[column, row] = gameObject;
+            board.allChips[column, row] = this;
         }
         if (Mathf.Abs(targetY - transform.position.y) > 0.1)
         {
@@ -74,7 +74,7 @@ public class Chip : MonoBehaviour
             transform.position = Vector2.Lerp(transform.position, tempPosition, 0.6f);
             if (board.allChips[column, row] != gameObject)
             {
-                board.allChips[column, row] = gameObject;
+                board.allChips[column, row] = this;
            //     matchFinder.FindAllMatches();
             }
             matchFinder.FindAllMatches();
@@ -84,7 +84,7 @@ public class Chip : MonoBehaviour
             //directly set position
             tempPosition = new Vector2(transform.position.x, targetY);
             transform.position = tempPosition;
-            board.allChips[column, row] = gameObject;
+            board.allChips[column, row] = this;
         }
     }
 
@@ -95,18 +95,19 @@ public class Chip : MonoBehaviour
             matchFinder.MatchChipsOfColor(otherChip.tag);
             isMatched = true;
         }
-        else if (otherChip.GetComponent<Chip>().isColorBomb)
+        else if (otherChip.isColorBomb)
         {
             matchFinder.MatchChipsOfColor(gameObject.tag);
-            otherChip.GetComponent<Chip>().isMatched = true;
+            otherChip.isMatched = true;
         }
         yield return new WaitForSeconds(0.5f);
         if (otherChip != null)
         {
-            if(!isMatched && !otherChip.GetComponent<Chip>().isMatched)
+            if(!isMatched && !otherChip.isMatched)
             {
-                otherChip.GetComponent<Chip>().row = row;
-                otherChip.GetComponent<Chip>().column = column;
+                otherChip.row = row;
+                otherChip.column = column;
+                otherChip.column = column;
                 row = previousRow;
                 column = previousColumn;
                 yield return new WaitForSeconds(0.5f);
@@ -176,8 +177,8 @@ public class Chip : MonoBehaviour
         {
             if (otherChip != null)
             {
-                otherChip.GetComponent<Chip>().column += -1 * (int)direction.x;
-                otherChip.GetComponent<Chip>().row += -1 * (int)direction.y;
+                otherChip.column += -1 * (int)direction.x;
+                otherChip.row += -1 * (int)direction.y;
                 column += (int)direction.x;
                 row += (int)direction.y;
                 StartCoroutine(CheckMove());

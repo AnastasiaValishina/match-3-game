@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class Chip : MonoBehaviour
 {
@@ -10,8 +11,9 @@ public class Chip : MonoBehaviour
 
     [SerializeField] GameObject rowArrowPrefab;
     [SerializeField] GameObject columnArrowPrefab;
-    [SerializeField] GameObject colorBombPrefab;
     [SerializeField] GameObject bombPrefab;
+    [SerializeField] Sprite colorBomb;
+    [SerializeField] Sprite bombSprite;
 
     public bool isMatched = false;
     public bool isColumnArrow = false;
@@ -30,6 +32,7 @@ public class Chip : MonoBehaviour
     Vector2 firstTouchPosition = Vector2.zero;
     Vector2 finalTouchPosition = Vector2.zero;
     Vector2 tempPosition;
+    SpriteRenderer myImage;
 
     private void Start()
     {
@@ -37,17 +40,8 @@ public class Chip : MonoBehaviour
         matchFinder = FindObjectOfType<MatchFinder>();
         hintManager = FindObjectOfType<HintManager>();
         endGameManager = FindObjectOfType<EndGameManager>();
+        myImage = GetComponent<SpriteRenderer>();
         AnimationLanding();
-    }
-
-    private void OnMouseOver()
-    {
-        if (Input.GetMouseButtonDown(1))
-        {
-            isColorBomb = true;
-            GameObject bomb = Instantiate(colorBombPrefab, transform.position, Quaternion.identity);
-            bomb.transform.parent = transform;
-        }
     }
 
     private void Update()
@@ -248,8 +242,7 @@ public class Chip : MonoBehaviour
         if (!isRowArrow &&!isColumnArrow && !isBomb)
         {
             isColorBomb = true;
-            GameObject rainbowBomb = Instantiate(colorBombPrefab, transform.position, Quaternion.identity);
-            rainbowBomb.transform.parent = transform;
+            myImage.sprite = colorBomb;
             gameObject.tag = "RainbowBomb";
         }
     }

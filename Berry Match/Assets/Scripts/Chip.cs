@@ -9,10 +9,9 @@ public class Chip : MonoBehaviour
     public int previousRow, previousColumn;
     public int targetX, targetY;
 
-    [SerializeField] GameObject rowArrowPrefab;
-    [SerializeField] GameObject columnArrowPrefab;
-    [SerializeField] GameObject bombPrefab;
-    [SerializeField] Sprite colorBomb;
+    [SerializeField] Sprite colorBombSprite;
+    [SerializeField] Sprite rowBombSprite;
+    [SerializeField] Sprite columnBombSprite;
     [SerializeField] Sprite bombSprite;
 
     public bool isMatched = false;
@@ -214,8 +213,7 @@ public class Chip : MonoBehaviour
         if (!isColumnArrow && !isColorBomb && !isBomb)
         {
             isRowArrow = true;
-            GameObject arrow = Instantiate(rowArrowPrefab, transform.position, Quaternion.identity);
-            arrow.transform.parent = transform;
+            chipSprite.sprite = rowBombSprite;
         }
     }
     
@@ -224,8 +222,7 @@ public class Chip : MonoBehaviour
         if (!isRowArrow && !isColorBomb && !isBomb)
         {
             isColumnArrow = true;
-            GameObject arrow = Instantiate(columnArrowPrefab, transform.position, Quaternion.identity);
-            arrow.transform.parent = transform;
+            chipSprite.sprite = columnBombSprite;
         }
     }
 
@@ -234,7 +231,7 @@ public class Chip : MonoBehaviour
         if (!isRowArrow &&!isColumnArrow && !isBomb)
         {
             isColorBomb = true;
-            chipSprite.sprite = colorBomb;
+            chipSprite.sprite = colorBombSprite;
             gameObject.tag = "RainbowBomb";
         }
     }
@@ -244,8 +241,7 @@ public class Chip : MonoBehaviour
         if (!isRowArrow && !isColumnArrow && !isColorBomb)
         {
             isBomb = true;
-            GameObject bomb = Instantiate(bombPrefab, transform.position, Quaternion.identity);
-            bomb.transform.parent = transform;
+            chipSprite.sprite = bombSprite;
         }
     }
 

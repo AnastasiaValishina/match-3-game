@@ -72,17 +72,17 @@ MonoBehaviour:
   scoreGoals: 640000005802000020030000
   endGameRequirements:
     gameType: 1
-    counterValue: 90
+    counterValue: 100
   levelGoals:
   - numberNeeded: 15
-    numberCollected: 24
+    numberCollected: 15
     goalSprite: {fileID: 21300000, guid: 6bdc00a78c438cc45af63ff9e1babbab, type: 3}
     matchValue: ChipGreen
   - numberNeeded: 15
-    numberCollected: 17
+    numberCollected: 15
     goalSprite: {fileID: 21300000, guid: a62f8e693a42a2f45885fb00b4a91b59, type: 3}
     matchValue: ChipRed
   - numberNeeded: 15
-    numberCollected: 23
+    numberCollected: 15
     goalSprite: {fileID: 21300000, guid: 376de09f3d283974c9cb783aa3f145b4, type: 3}
     matchValue: ChipBlue

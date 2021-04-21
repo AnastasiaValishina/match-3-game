@@ -54,6 +54,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 3391322157
+    locked: 0
   - name: BackgroundTiles
     uniqueID: 1512564503
     locked: 0
@@ -65,6 +68,9 @@ TagManager:
     locked: 0
   - name: Boosters
     uniqueID: 1205332589
+    locked: 0
+  - name: Tiles
+    uniqueID: 3677437573
     locked: 0
   - name: Hints
     uniqueID: 3805744459

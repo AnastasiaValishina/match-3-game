@@ -727,7 +727,7 @@ public class Board : MonoBehaviour
                 Vector2 adjacent = CheckForAdjacent(newX, newY);
                 if (adjacent != Vector2.zero)
                 {
-                    Destroy(allChips[newX + (int)adjacent.x, newY + (int)adjacent.y]);
+                    Destroy(allChips[newX + (int)adjacent.x, newY + (int)adjacent.y].gameObject);
                     Vector2 tempPosition = new Vector2(newX + (int)adjacent.x, newY + (int)adjacent.y);
                     GameObject tile = Instantiate(slimeTilePrefab, tempPosition, Quaternion.identity);
                     slimeTiles[newX + (int)adjacent.x, newY + (int)adjacent.y] = tile.GetComponent<BreakableTile>(); 

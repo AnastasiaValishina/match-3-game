@@ -70,7 +70,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -638081529
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 376de09f3d283974c9cb783aa3f145b4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -107,7 +107,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.8233333, y: 0.78333336}
+  m_Size: {x: 0.9, y: 0.9}
   m_EdgeRadius: 0
 --- !u!114 &-2449402131090703256
 MonoBehaviour:
@@ -127,14 +127,12 @@ MonoBehaviour:
   previousColumn: 0
   targetX: 0
   targetY: 0
-  rowArrowPrefab: {fileID: 6398824908183710723, guid: d2bb1b10cabe4c2458687cf95d3ac9db,
-    type: 3}
-  columnArrowPrefab: {fileID: 2497831096530255126, guid: 0ff51d92187daad4cbe81049d7942670,
-    type: 3}
   bombPrefab: {fileID: 618999249293769740, guid: 723164b5db33d5348a5bde523162fd17,
     type: 3}
-  colorBomb: {fileID: 21300000, guid: 170ac9751e4f65842a11d894d4a282fc, type: 3}
-  bombSprite: {fileID: 21300000, guid: 0a3eb16025f08c1409c10060ac84168b, type: 3}
+  colorBombSprite: {fileID: 21300000, guid: 170ac9751e4f65842a11d894d4a282fc, type: 3}
+  rowBombSprite: {fileID: 21300000, guid: 2b492c538d45be3419f93e998d2b6323, type: 3}
+  columnBombSprite: {fileID: 21300000, guid: 8eaea285db0e7194bbec2c2841b29ba0, type: 3}
+  bombSprite: {fileID: 21300000, guid: 12b69935fe00e8343ae0639d6a5a14ac, type: 3}
   isMatched: 0
   isColumnArrow: 0
   isRowArrow: 0

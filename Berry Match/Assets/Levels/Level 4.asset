@@ -93,7 +93,7 @@ MonoBehaviour:
     counterValue: 90
   levelGoals:
   - numberNeeded: 18
-    numberCollected: 18
+    numberCollected: 0
     goalSprite: {fileID: 7726078789101045172, guid: c00f9a9cf35bd1e45a70333b7b6197ac,
       type: 3}
     matchValue: IceWhole

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,13 +19,10 @@ public class EndGameManager : MonoBehaviour
     [SerializeField] Text movesLabel;
     [SerializeField] Text timeLabel;
     [SerializeField] Text counter;
-    [SerializeField] GameObject winPopup;
-    [SerializeField] GameObject lostPopup;
 
-    int currentCounterValue;
+    public int currentCounterValue;
     float timerSeconds;
     static EndGameManager instance;
-
     public static EndGameManager Instance
     {
         get
@@ -98,24 +93,9 @@ public class EndGameManager : MonoBehaviour
 
             if (currentCounterValue <= 0)
             {
-                LoseGame();
+                UIAnimationController.Instance.LoseGame();
             }
             counter.text = "" + currentCounterValue;
         }
-    }
-
-    public void WinGame()
-    {
-        winPopup.SetActive(true);
-        Board.Instance.currentState = GameState.win;
-        currentCounterValue = 0;
-        FindObjectOfType<UIAnimationController>().GameOverAnim();
-    }
-
-    public void LoseGame()
-    {
-        lostPopup.SetActive(true);
-        Board.Instance.currentState = GameState.lose;
-        FindObjectOfType<UIAnimationController>().GameOverAnim();
     }
 }

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Level 3
   m_EditorClassIdentifier: 
   width: 5
-  height: 6
+  height: 7
   boardLayout:
   - x: 0
     y: 1
@@ -55,13 +55,17 @@ MonoBehaviour:
   - {fileID: 4196614675451329868, guid: 83d46809405c63a4b8c8287b15771c50, type: 3}
   - {fileID: -2449402131090703256, guid: 5b91db177c3c6f24d89929c677c93c6d, type: 3}
   - {fileID: -8556236454190175356, guid: 03f24a8932c058b4389cf7858eee0640, type: 3}
-  - {fileID: 4196614675451329868, guid: 83d46809405c63a4b8c8287b15771c50, type: 3}
+  - {fileID: 864983205224092360, guid: 1cc6c48c5dfd2b341ada5c6030c69606, type: 3}
   scoreGoals: 640000009001000058020000
   endGameRequirements:
     gameType: 0
     counterValue: 20
   levelGoals:
   - numberNeeded: 12
-    numberCollected: 0
+    numberCollected: 12
     goalSprite: {fileID: 21300000, guid: d03ecc22320363145bb89a91ee951ca6, type: 3}
     matchValue: Concrete
+  - numberNeeded: 15
+    numberCollected: 17
+    goalSprite: {fileID: 21300000, guid: 709b036860c6faa43a2b13fb89d9d3c3, type: 3}
+    matchValue: ChipOrange

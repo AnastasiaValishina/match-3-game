@@ -50,7 +50,7 @@ public class UIAnimationController : MonoBehaviour
 
     public void LoseGame()
     {
-        winPopup.gameObject.SetActive(true);
+        lostPopup.gameObject.SetActive(true);
         fadePanel.DOFade(1f, 1.5f);
         lostPopup.DOAnchorPosY(0f, 1.5f).SetEase(Ease.OutSine);
         Board.Instance.currentState = GameState.lose;
